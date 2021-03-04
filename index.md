@@ -1,3 +1,8 @@
+
+---
+layout: home
+author_profile: true
+---
 ## 인덱스만 기억해, 나머지는 기록해.
 [1. 인터뷰-스프링](https://jungmockdan.github.io/interview/spring)
 
