@@ -1,5 +1,7 @@
 # main links
 main:
+  - title: "Categories"
+    url: /categories/
   # - title: "About"
   #   url: https://mmistakes.github.io/minimal-mistakes/about/
   # - title: "Sample Posts"
@@ -9,5 +11,4 @@ main:
   # - title: "Sitemap"
   #   url: /sitemap/
   
-   - title: "Categories"
-    url: /categories/
+   
