@@ -33,8 +33,11 @@
   
 - AOP (Aspect Oriented Programming) : 코드 분리를 위해 `Advices, Pointcuts`등을 사용할 수 있는 계층
 - Instrumentation : 클래스 계측과 클래스로더 구현을 지원하는 계층
-- Test
-- Messaging
-- Aspects
+- Test : JUnit과 TestNG로 테스트할 수 있도록 지원하는 계층
+- Messaging : `STOMP-스트리밍 텍스트 지향 메시지 프로토콜` 을 지원하는 모듈. WebSocket 클라이언트에서 STOMP 메시지를 라우팅하고 처리하는 데 사용되는 annotaion 프로그래밍 모델을 지원.
+- Aspects : AspectJ와의 통합을 지원을 제공하는 모듈
+
+4. 코어컨테이너-Application 컨텍스트-모듈을 설명해라.
+
 
 
