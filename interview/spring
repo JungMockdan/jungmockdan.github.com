@@ -31,8 +31,10 @@
   - Web-Socket module
   - Web-Portlet module
   
-- AOP (Aspect Oriented Programming)
-- Instrumentation 
+- AOP (Aspect Oriented Programming) : 코드 분리를 위해 `Advices, Pointcuts`등을 사용할 수 있는 계층
+- Instrumentation : 클래스 계측과 클래스로더 구현을 지원하는 계층
 - Test
+- Messaging
+- Aspects
 
 
