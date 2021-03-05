@@ -53,7 +53,7 @@ en: &DEFAULT_EN
   breadcrumb_separator       : "/"
   menu_label                 : "Toggle menu"
   search_label               : "Toggle search"
-  toc_label                  : "이 페이지의 "
+  toc_label                  : "On this page "
   ext_link_label             : "Direct link"
   less_than                  : "less than"
   minute_read                : "minute read"
@@ -644,7 +644,7 @@ ko: &DEFAULT_KO
   breadcrumb_separator       : "/"
   menu_label                 : "토글 메뉴"
   search_label               :
-  toc_label                  : "On This Page"
+  toc_label                  : "이 포스트의 목차"
   ext_link_label             : "직접 링크"
   less_than                  : "최대"
   minute_read                : "분 소요"
