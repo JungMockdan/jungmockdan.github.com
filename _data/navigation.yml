@@ -8,7 +8,14 @@ main:
     url: /roadmap/
   - title: "기타"
     url: /nowhere/
+  - title: "About"
+    url: /about/
+  - title: "Tag"
+    url: /tags/
+  - title: "Archive"
+    url: /year-archive/  
   - title: "▦"
     url: /categories/
+    
   
    
