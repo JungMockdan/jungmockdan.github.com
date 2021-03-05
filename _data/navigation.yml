@@ -8,7 +8,7 @@ main:
     url: /코딩테스트/
   - title: "Road_Map"
     url: /roadmap/
-  # - title: "Sitemap"
-  #   url: /sitemap/
+  - title: "기타"
+    url: /nowhere/
   
    
