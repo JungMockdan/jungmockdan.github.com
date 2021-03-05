@@ -2,12 +2,12 @@
 main:
   - title: "Categories"
     url: /categories/
-  # - title: "About"
-  #   url: https://mmistakes.github.io/minimal-mistakes/about/
-  # - title: "Sample Posts"
-  #   url: /year-archive/
-  # - title: "Sample Collections"
-  #   url: /collection-archive/
+  - title: "인터뷰"
+    url: /Interview/
+  - title: "코딩테스트"
+    url: /코딩테스트/
+  - title: "Road_Map"
+    url: /roadmap/
   # - title: "Sitemap"
   #   url: /sitemap/
   
