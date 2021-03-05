@@ -1,7 +1,5 @@
 # main links
-main:
-  - title: "Categories"
-    url: /categories/
+main:  
   - title: "인터뷰"
     url: /Interview/
   - title: "코딩테스트"
@@ -10,5 +8,7 @@ main:
     url: /roadmap/
   - title: "기타"
     url: /nowhere/
+  - title: "▦"
+    url: /categories/
   
    
