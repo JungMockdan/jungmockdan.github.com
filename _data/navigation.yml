@@ -18,15 +18,6 @@ main:
   - title: "Archive"
     url: /year-archive/  
   - title: "▦"
-    url: /categories/
-    children:
-      - title: "인터뷰"
-        url: /categories/#interview
-      - title: "코딩테스트"
-        url: /categories/#코딩테스트
-      - title: "Road_Map"
-        url: /categories/#roadmap
-      - title: "기타"
-    
+    url: /categories/ 
   
    
