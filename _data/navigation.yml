@@ -1,9 +1,7 @@
 # main links
-sidebar:
-  title: "▦"
-  nav: categories
-categories : 
-     children:
+sidebar-sample:
+  - title:  "▦"
+    children:
           - title: "인터뷰"
             url: /categories/#interview
           - title: "코딩테스트"
