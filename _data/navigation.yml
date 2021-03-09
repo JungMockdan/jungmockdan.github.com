@@ -9,8 +9,8 @@ sidebar-sample:
           - title: "Road_Map"
             url: /categories/#roadmap
           - title: "기타"
+            url: /nowhere/
 main:  
-    url: /nowhere/
   - title: "About"
     url: /about/
   - title: "Tag"
