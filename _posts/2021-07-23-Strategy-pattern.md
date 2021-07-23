@@ -1,6 +1,6 @@
 ---
 title: "Strategy pattern"
-date: 2021-07-23 11:26:28 -0400
+date: 2021-07-23 13:56:28 -0400
 categories: 디자인패턴
 tags: gof java design-pattern Strategy 전략패턴
 # 목차
