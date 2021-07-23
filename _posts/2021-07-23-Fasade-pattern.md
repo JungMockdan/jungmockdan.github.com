@@ -1,6 +1,6 @@
 ---
 title: "Facade pattern"
-date: 2021-07-23 08:26:28 -0400
+date: 2021-07-23 11:26:28 -0400
 categories: 디자인패턴
 tags: gof java design-pattern Facade
 # 목차
