@@ -91,7 +91,7 @@ public class Reader {
 public class Main {
 
     public static void main(String[] args){
-    	FTP ftpClient = new FTP("www.test.co.kr". 22, "/home/test");
+    	FTP ftpClient = new FTP("www.test.co.kr", 22, "/home/test");
         ftpClient.connect();
         ftpClient.moveDirectory();
         
@@ -158,7 +158,7 @@ public class SftpClient {
 public class Main {
    
     public static void main(String[] args){
-      SftpClient sftpClient = new FTP("www.test.co.kr". 22, "/home/test","test.txt");
+      SftpClient sftpClient = new FTP("www.test.co.kr", 22, "/home/test","test.txt");
       sftpClient.connect();
       sftpClient.write();
       sftpClient.read();
