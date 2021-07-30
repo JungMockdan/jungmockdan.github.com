@@ -18,7 +18,7 @@ toc_sticky: true
 > git log --branches --not --remotes // 예쁘지가 않다. 알아보기가 힘들다.
 > git log --branches --not --remotes --oneline --graph --decorate  // 휴..겨우 읽고 싶은 마음이 생겼다. 
 ```
-깔끔하게도 그런 파일이 없으니 바로 다음단계다.
+깔끔하게도 그런 파일이 없으니 바로 다음 단계다.
 2. 일단 기존 로컬로 딴 브랜치 temp 는 delete 했다.
 ```bash
 > git branch -d  feature/temp  // 실패했다. 그래서 강제로 삭제했다.
