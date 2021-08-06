@@ -36,7 +36,7 @@ toc_sticky: true
 
 먼저 `파일 > 환경설정 > 내보내기 > PDF`를 차례대로 선택하고 그림과 같이 설정하세요. 그림은 header와 footer내용이 비워져 있지만 간단하게 채워넣기만 하면 바로 적용이 됩니다. 이 방법은 제가 가로 출력물이 필요하여 커스텀한 내용입니다. 얼마든지 본인이 원하는 형식으로 변경할 수 있습니다. 다만, 결과는 내보내기를 해봐야 알수 있기 때문에 적절한 디자인을 적용하고자 하면 어렵습니다. 다만 html, javascript 그리고 css에 대한 지식이 있으신 분이라면 더 예쁘게 설정하실 수 있습니다.
 
-![타이포라 pdf 가로출력 설정 가이드](https://github.com/JungMockdan/jungmockdan.github.com/blob/gh-pages/assets/images/post/%ED%83%80%EC%9D%B4%ED%8F%AC%EB%9D%BC%20pdf%20%EA%B0%80%EB%A1%9C%EC%B6%9C%EB%A0%A5%20%EC%84%A4%EC%A0%95%20%EA%B0%80%EC%9D%B4%EB%93%9C.png)
+![타이포라 pdf 가로출력 설정 가이드](https://raw.githubusercontent.com/JungMockdan/jungmockdan.github.com/gh-pages/assets/images/post/%ED%83%80%EC%9D%B4%ED%8F%AC%EB%9D%BC%20pdf%20%EA%B0%80%EB%A1%9C%EC%B6%9C%EB%A0%A5%20%EC%84%A4%EC%A0%95%20%EA%B0%80%EC%9D%B4%EB%93%9C.png)
 
 - Append Extra Content
 
