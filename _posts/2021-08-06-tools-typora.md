@@ -38,6 +38,9 @@ toc_sticky: true
 
 ![타이포라 pdf 가로출력 설정 가이드](https://raw.githubusercontent.com/JungMockdan/jungmockdan.github.com/gh-pages/assets/images/post/%ED%83%80%EC%9D%B4%ED%8F%AC%EB%9D%BC%20pdf%20%EA%B0%80%EB%A1%9C%EC%B6%9C%EB%A0%A5%20%EC%84%A4%EC%A0%95%20%EA%B0%80%EC%9D%B4%EB%93%9C.png)
 
+
+- Append Extra Content
+
   문서에 정의된 `YAML front matters`이나 타이포라에서 기본적으로 제공하는 ${date}, ${title}, ${author}, ${pageNo}, ${pageCount} 와 같은 인자를 사용하여 동적으로 데이터를 생성할 수 있습니다. 물론 이 인자들은 YAML front matters를 통해 재정의 할 수 도 있습니다.
 
 ```html
