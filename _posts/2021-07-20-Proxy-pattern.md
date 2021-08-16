@@ -52,7 +52,7 @@ public Browser implements IBrowser{
 ```java
 public class Main {
    
-    pubic static void main(String[] args){
+    public static void main(String[] args){
     	Browser browser = new Browser("www.naver.com");
     	browser.show();
     	browser.show();
@@ -88,7 +88,7 @@ public BrowserProxy implements IBrowser{
 ```java
 public class Main {
    
-    pubic static void main(String[] args){
+    public static void main(String[] args){
     	.
     	.
     	.
@@ -147,7 +147,7 @@ public AopBrowser implements IBrowser{
 ```java
 public class Main {
    
-    pubic static void main(String[] args){
+    public static void main(String[] args){
 
 		AtomicLong start = new AtomicLong();
 		AtomicLong end = new AtomicLong();

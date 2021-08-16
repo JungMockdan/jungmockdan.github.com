@@ -23,7 +23,7 @@ public interface Electronic110V {
 ```java
 public class HairDryer implements Electronic110V {
     @Override
-    pubic void powerOn(){
+    public void powerOn(){
     	System.out.println("헤어 드라이어 110v on");
     }
     
@@ -39,7 +39,7 @@ public interface Electronic220V {
 ```java
 public class AirConditioner implements Electronic220V {
     @Override
-    pubic void powerOn(){
+    public void powerOn(){
     	System.out.println("에어컨 220v on");
     }
     
@@ -49,7 +49,7 @@ public class AirConditioner implements Electronic220V {
 ```java
 public class VacuumCleaner implements Electronic220V {
     @Override
-    pubic void powerOn(){
+    public void powerOn(){
     	System.out.println("청소기 220v on");
     }
     
@@ -59,7 +59,7 @@ public class VacuumCleaner implements Electronic220V {
 ```java
 public class Main {
    
-    pubic static void main(String[] args){
+    public static void main(String[] args){
     	//110v
     	HairDryer hairDryer = new HairDryer();
     	connect(hairDryer);
@@ -76,7 +76,7 @@ public class Main {
     }
     
     // 콘세트 
-    public static void connect(Electronic110V){
+    public static void connect(Electronic110V electronic110V){
     	electronic110V.powerOn();
     }
 }
@@ -91,7 +91,7 @@ public class SocketAdapter implements Electronic110V {
 		this.electronic220V = electronic220V;
 	}
     @Override
-    pubic void powerOn(){
+    public void powerOn(){
     	electronic220V.connect();
     	System.out.println("220v on");
     }
