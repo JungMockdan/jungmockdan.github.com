@@ -11,7 +11,7 @@ toc_sticky: true
 ## 마리아 db 재시작하기
 회사에서 집의 로컬db에 접속하기 위해 접속허용설정과 권한 변경을 하고 나서 서비스를 재시작하려고 했는데 잘 되지 않았다.
 아래 처럼 해결하였다.
-[과리자cmd](https://github.com/JungMockdan/jungmockdan.github.com/blob/gh-pages/assets/images/post/cmd-mariadb-restart.PNG?raw=true)
+[관리자 권한 cmd](https://github.com/JungMockdan/jungmockdan.github.com/blob/gh-pages/assets/images/post/cmd-mariadb-restart.PNG?raw=true)
 ```shell
 // 바로 서비스를  중지해봅니다.
 C:\Program Files\MariaDB 10.5\bin> net stop mysql
