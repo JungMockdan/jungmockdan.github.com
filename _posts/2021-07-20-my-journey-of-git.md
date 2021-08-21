@@ -64,14 +64,16 @@ git branch -m <new_name_branch>
 3. 잘못된 이름의 원격 branch를 삭제한다.
 4. 현재 브랜치의 origin을 확인한다.
 ```shell
-  -- 1. 변경할 브랜치로 체크아웃한다.
-PS C:\Users\mockd\git\CCCServer> git checkout <old_name_branch>
-  -- 2. 새이름으로 push 한다.
-PS C:\Users\gogo>  git push origin -u <new_name_branch>
-  -- 3. 잘못된 이름의 원격 branch를 삭제한다.
-PS C:\Users\mockd\git\CCCServer> git push origin --delete <old_name_branch>
-  -- 4. 현재 브랜치의 정보를 확인하면 head 정보가 바뀌었음을 확인가능하다.
-PS C:\Users\gogo> git log --graph --pretty=oneline --abbrev-commit --all --decorate
+1. 변경할 브랜치로 체크아웃한다.
+git checkout <old_name_branch>
+
+2. 새이름으로 push 한다.
+git push origin -u <new_name_branch>
+
+3. 잘못된 이름의 원격 branch를 삭제한다.
+git push origin --delete <old_name_branch>
+4. 현재 브랜치의 정보를 확인하면 head 정보가 바뀌었음을 확인가능하다.
+git log --graph --pretty=oneline --abbrev-commit --all --decorate
 * 8b1eb3c (HEAD -> vos-biz/web-api, origin/vos-biz/web-api) response
 ```
 
