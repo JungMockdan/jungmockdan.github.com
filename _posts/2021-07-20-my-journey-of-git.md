@@ -56,13 +56,7 @@ toc_sticky: true
 git branch -m <new_name_branch>
 ```
 2. 원격 저장소 이름변경
-```shell
-git branch -m <new_name_branch>
-```
-1. 변경할 브랜치로 체크아웃한다.
-2. 새이름으로 push 한다.
-3. 잘못된 이름의 원격 branch를 삭제한다.
-4. 현재 브랜치의 origin을 확인한다.
+
 ```shell
 1. 변경할 브랜치로 체크아웃한다.
 git checkout <old_name_branch>
