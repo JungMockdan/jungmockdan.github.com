@@ -37,7 +37,8 @@ toc_sticky: true
 
 ## 2021-07-29
 
-### 상황 : intelij gui에서 commit and push 를 하다 실패되어 커밋내용을 확인하고 싶었다.
+### 상황 
+- intelij gui에서 commit and push 를 하다 실패되어 커밋내용을 확인하고 싶었다.
 
 ### 해결 :
 ```shell
