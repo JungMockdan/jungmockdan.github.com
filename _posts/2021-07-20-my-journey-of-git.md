@@ -4,9 +4,7 @@ title: "나와 GIT"
 date: 2021-07-20 13:26:28 -0400
 categories: git
 tags: git command
-sitemap:
-    changefreq : daily
-    priority : 1.0
+
 
 # 목차
 toc: true  

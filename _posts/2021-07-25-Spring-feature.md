@@ -4,9 +4,7 @@ title: "Spring features"
 date: 2021-07-25 14:05:28 -0400
 categories: spring
 tags: java spring framework IoC DI AOP
-sitemap:
-    changefreq : daily
-    priority : 1.0
+
 
 # 목차
 toc: true  

@@ -4,9 +4,7 @@ title: "Decorator pattern"
 date: 2021-07-23 08:26:28 -0400
 categories: design-pattern
 tags: gof java design-pattern Decorator
-sitemap:
-    changefreq : daily
-    priority : 1.0
+
 
 # 목차
 toc: true  

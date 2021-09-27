@@ -4,9 +4,7 @@ title: "Strategy pattern"
 date: 2021-07-23 13:56:28 -0400
 categories: design-pattern
 tags: gof java design-pattern Strategy 전략패턴
-sitemap:
-    changefreq : daily
-    priority : 1.0
+
 
 # 목차
 toc: true  
