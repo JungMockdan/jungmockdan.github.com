@@ -1,4 +1,8 @@
 ---
+layout: post
+sitemap :
+    changefreq : daily
+    priority : 1.0
 title: "공통응답객체.md"
 date: 2021-08-07 16:52:39 -0400 
 categories: 설계

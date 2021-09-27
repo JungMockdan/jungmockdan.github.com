@@ -1,4 +1,8 @@
 ---
+layout: post
+sitemap :
+  changefreq : daily
+  priority : 1.0
 title: "2021-08-06-tools-typora.md"
 date: 2021-08-06 10:05:42 -0400 
 categories: 생산성
