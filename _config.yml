@@ -300,3 +300,5 @@ defaults:
       comments: false
       sidebar:
         nav: "docs"
+
+theme: jekyll-theme-minimal
