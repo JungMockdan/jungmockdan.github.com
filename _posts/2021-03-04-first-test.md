@@ -1,11 +1,12 @@
 ---
 layout: post
-sitemap :
-  changefreq : daily
-  priority : 1.0
 title: "post test!"
 date: 2021-03-04 08:26:28 -0400
 categories: test
+sitemap:
+  changefreq : daily
+  priority : 1.0
+
 # 목차
 toc: true  
 toc_sticky: true 

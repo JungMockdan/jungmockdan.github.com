@@ -1,12 +1,13 @@
 ---
 layout: post
-sitemap :
-    changefreq : daily
-    priority : 1.0
 title: "Facade pattern"
 date: 2021-07-23 11:26:28 -0400
 categories: design-pattern
 tags: gof java design-pattern Facade
+sitemap:
+    changefreq : daily
+    priority : 1.0
+
 # 목차
 toc: true  
 toc_sticky: true
