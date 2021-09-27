@@ -1,8 +1,8 @@
 ---
-title: "2021-08-07-enterprize-common-response-object.md"
+title: "공통응답객체.md"
 date: 2021-08-07 16:52:39 -0400 
-categories: ?? 
-tags: ??
+categories: 설계
+tags: java design
 
 # 목차
 
