@@ -301,4 +301,4 @@ defaults:
       sidebar:
         nav: "docs"
 
-theme: jekyll-theme-cayman
+theme: jekyll-theme-minimal
