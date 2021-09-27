@@ -1,7 +1,11 @@
 ---
+layout: post
+sitemap :
+    changefreq : daily
+    priority : 1.0
 title: "Decorator pattern"
 date: 2021-07-23 08:26:28 -0400
-categories: 디자인패턴
+categories: design-pattern
 tags: gof java design-pattern Decorator
 # 목차
 toc: true  

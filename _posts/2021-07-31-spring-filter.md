@@ -1,5 +1,8 @@
 ---
-title: "2021-07-31-spring-filter.md"
+layout: post
+sitemap :
+    changefreq : daily
+    priority : 1.0 "2021-07-31-spring-filter.md"
 date: 2021-07-31 19:10:37 -0400 
 categories: spring
 tags: spring filter
