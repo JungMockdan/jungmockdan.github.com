@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "Decorator pattern"
 date: 2021-07-23 08:26:28 -0400
 categories: design-pattern

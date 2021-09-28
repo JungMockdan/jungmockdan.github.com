@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "Proxy pattern"
 date: 2021-07-20 13:26:28 -0400
 categories: design-pattern

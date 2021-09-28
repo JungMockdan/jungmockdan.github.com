@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "Facade pattern"
 date: 2021-07-23 11:26:28 -0400
 categories: design-pattern

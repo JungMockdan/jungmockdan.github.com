@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "Adapter pattern"
 date: 2021-07-20 13:26:28 -0400
 categories: design-pattern

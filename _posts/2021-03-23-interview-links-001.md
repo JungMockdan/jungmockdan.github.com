@@ -1,6 +1,5 @@
 ---
 
-layout: post
 title: "자바 인터뷰 링크"
 date: 2021-03-23 15:11:28 -0400
 categories: interview

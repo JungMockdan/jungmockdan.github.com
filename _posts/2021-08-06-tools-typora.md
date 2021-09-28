@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "타이포라 사용하기"
 date: 2021-08-06 10:05:42 -0400 
 categories: productivity

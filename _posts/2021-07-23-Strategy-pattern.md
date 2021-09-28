@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "Strategy pattern"
 date: 2021-07-23 13:56:28 -0400
 categories: design-pattern

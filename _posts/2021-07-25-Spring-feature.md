@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "Spring features"
 date: 2021-07-25 14:05:28 -0400
 categories: spring
