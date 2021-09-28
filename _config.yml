@@ -275,7 +275,7 @@ defaults:
       path: ""
       type: posts
     values:
-      layout: default
+      layout: single
       author_profile: true
       read_time: true
       comments: true
@@ -286,14 +286,14 @@ defaults:
       path: ""
       type: pages
     values:
-      layout: default
+      layout: single
       author_profile: true
   # _docs
   - scope:
       path: ""
       type: docs
     values:
-      layout: default
+      layout: single
       read_time: false
       author_profile: false
       share: false
