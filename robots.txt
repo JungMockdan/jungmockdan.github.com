@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://jungmockdan.github.io/mysitemap.xml
+Sitemap: https://jungmockdan.github.io/sitemap.xml
