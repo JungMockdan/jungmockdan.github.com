@@ -1113,16 +1113,5 @@
     <user id="331" parent="1" name="root">
       <Host>localhost</Host>
     </user>
-    <table id="332" parent="6" name="test"/>
-    <column id="333" parent="332" name="id">
-      <Position>1</Position>
-      <DataType>bigint(20)|0s</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <key id="334" parent="332" name="PRIMARY">
-      <NameSurrogate>1</NameSurrogate>
-      <ColNames>id</ColNames>
-      <Primary>1</Primary>
-    </key>
   </database-model>
 </dataSource>
