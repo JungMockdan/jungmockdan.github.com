@@ -86,3 +86,4 @@ where type(i) = Book
 ```
 
 ### 조건식(case 등)
+- 
