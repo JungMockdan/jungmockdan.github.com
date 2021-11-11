@@ -4,8 +4,8 @@
 
 @charset "utf-8";
 
-@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
-@import "minimal-mistakes"; // main partials
+@import "../../_sass/minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
+@import "../../_sass/minimal-mistakes"; // main partials
 
 // Font 변경
 @import url('https://fonts.googleapis.com/css?family=Inconsolata');
