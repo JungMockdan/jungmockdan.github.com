@@ -8,13 +8,13 @@
 <html lang="{{ site.locale | slice: 0,2 | default: "en" }}" class="no-js">
 <head>
     <meta name="naver-site-verification" content="b075f7c34ce1c713f57c1cbefffe99230dbf4ea4" />
+    <link href="{{ site.favicon_url }}/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon"/>
     {% include head.html %}
     {% include head/custom.html %}
     <!-- mathjax 추가 -->
     {% if page.use_math %}
     {% include mathjax_support.html %}
     {% endif %}
-    <link href="{{ site.favicon_url }}/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon"/>
 </head>
 
 <body class="layout--{{ page.layout | default: layout.layout }}{% if page.classes or layout.classes %}{{ page.classes | default: layout.classes | join: ' ' | prepend: ' ' }}{% endif %}">
