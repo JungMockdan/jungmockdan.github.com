@@ -188,6 +188,8 @@ lsi: false
 excerpt_separator: "\n\n"
 incremental: false
 
+favicon_url: /assets/favicon
+
 
 # Markdown Processing
 kramdown:
