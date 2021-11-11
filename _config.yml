@@ -21,7 +21,7 @@ title                    : "[하고x3] 하고, 실패하고, 다시하고"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : "정목단"
-description              : "JAVA개발자로서 노력과 성장의 기록. 공부하고 이해하고 출력하는 목표"
+description              : "JAVA 개발자로써 노력과 성장의 기록. 공부하고 이해하고 출력하는 목표"
 url                      : "https://jungmockdan.github.io"
 baseurl                  : ""
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
