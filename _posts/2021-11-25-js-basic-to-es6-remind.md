@@ -58,8 +58,7 @@ const cnstCircle = new ConstructorCircle(1);
 모든 object에 constructor가 있다. 그 오브젝트를 생성하는 함수를 참조한다. (해당 오브젝트는 함수를 이용해 생성되었다.)
 위 코드에서 생성된 각 object의 constructor를 접근해보면 각각을 생성한 함수를 리턴한다.
 
-todo github 이미지 업로드 후 참조하기
-!(자바스크립트 오브젝트의 콘스트럭터)[js-obj-constructor.png]
+!(자바스크립트 오브젝트의 콘스트럭터)[https://raw.githubusercontent.com/JungMockdan/jungmockdan.github.com/gh-pages/assets/images/post/js-obj-constructor.png]
 
 e.g 프리미브타입도 마찬가지이다.
 
