@@ -3,6 +3,8 @@ title: "나와 GIT"
 date: 2021-07-20 13:26:28 -0400
 categories: git
 tags: git command
+
+
 # 목차
 toc: true  
 toc_sticky: true
@@ -73,6 +75,18 @@ toc_sticky: true
 
 
 ## 2021-xx-xx
+
+### 상황
+- 회사에서 잠깐 머 테스트한다고 깃에다가 레파지토리를 만들었는데 그게 이름이 기존에 있던 레파지토리 사실은 이 블로그 레파지토리랑 이름이 비슷했다. 해당 브랜치는 생성 후에 삭제를 했는데. 삭제가 안되고 계속 남아있었다. 그래서 내가 꿈을 꾼건가봐 하고는 해당 브랜치를 삭제했다. 그렇다 이브랜치이다. 삭제할때 브랜치명도 긁어 붙였다. 그렇다...삭제되었다.  다행히 집에가면 소스는 있을 테니 다시 올려본다.
+### 해결 :
+1. 깃허브에 레파지토리를 생성한다. 아래 코드를 실행한다. 끝. 
+2. 참고로, 로컬에서 먼저 만든 프로젝트를 깃허브에 올리는 것도 같은 방법을 쓰면 된다.
+```shell
+>git remote add origin https://github.com/JungMockdan/jungmockdan.github.com.git
+>git branch -M main
+>git push -u origin main
+ 
+```## 2021-xx-xx
 
 ### 상황
 - 

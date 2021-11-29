@@ -13,15 +13,15 @@
 
 # theme                  : "minimal-mistakes-jekyll"
 remote_theme           : "mmistakes/minimal-mistakes"
-minimal_mistakes_skin    : "dark" # "air", "aqua", "contrast", "default", "dirt", "neon", "mint", "plum", "sunrise"
+minimal_mistakes_skin    : "_dark" # "air", "aqua", "contrast", "default", "dirt", "neon", "mint", "plum", "sunrise"
 
 # Site Settings
 locale                   : "en-US"
-title                    : "그냥 하는 go해's 인덱싱"
+title                    : "[하고x3] 하고, 실패하고, 다시하고"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : "정목단"
-description              : "보고 하고 이해하고 출력하기"
+description              : "JAVA 개발자로써 노력과 성장의 기록. 공부하고 이해하고 출력하는 목표"
 url                      : "https://jungmockdan.github.io"
 baseurl                  : ""
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
@@ -187,6 +187,9 @@ highlighter: rouge
 lsi: false
 excerpt_separator: "\n\n"
 incremental: false
+
+# favicon
+favicon_url: /assets/favicon
 
 
 # Markdown Processing

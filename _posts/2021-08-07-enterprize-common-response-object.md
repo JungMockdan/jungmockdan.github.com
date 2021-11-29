@@ -1,8 +1,9 @@
 ---
-title: "2021-08-07-enterprize-common-response-object.md"
+title: 공통응답객체의 예시
 date: 2021-08-07 16:52:39 -0400 
-categories: ?? 
-tags: ??
+categories: design
+tags: java design
+
 
 # 목차
 
