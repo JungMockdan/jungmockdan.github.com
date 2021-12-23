@@ -1,0 +1,7 @@
+
+
+#  window > powershell 에서 webrequest 테스트 해보기
+$URL = "api 주소";
+$text = "key=value&key=value&key=value&key=value...."
+$postParam=[System.Text.Encoding]::UTF8.GetBytes($text)
+(Measure-Command -Expression { Invoke-WebRequest -Method POST -Body $postParam -ContentType "application/x-www-form-urlencoded; charset=utf-8" -Uri $URL }).Milliseconds
