@@ -69,3 +69,26 @@ for /L %%D in (0,1,1) do (
 ```
 
 위의 경우 foo.html, bar.html 2개의 파일이 생성되는데 title 태그안에 파일명이 들어가도록 생성하였다.
+한글 깨짐 현상 해결 : $env 를 설정해도 한글이 깨지기 때문에 참조 사이트에서 한데로 진행해야 한다.
+
+https://psychoria.tistory.com/737
+
+관리자권한
+```shell
+if (!(Test-Path -Path $PROFILE.AllUsersAllHosts)) {
+  New-Item -ItemType File -Path $PROFILE.AllUsersAllHosts -Force
+  "`$env:LC_ALL='C.UTF-8'" | 
+    Out-File -FilePath $PROFILE.AllUsersAllHosts -Append
+  "[System.Console]::InputEncoding = [System.Console]::OutputEncoding = [System.Text.Encoding]::UTF8" | 
+    Out-File -FilePath $PROFILE.AllUsersAllHosts -Append
+}
+```
+파워셀 재실행 
+에러발생시 에러 발생 하면 역시 관리자 권한으로
+```shell
+Get-ExecutionPolicy -list
+
+Set-ExecutionPolicy RemoteSigned
+```
+
+파워셀 재실행 
