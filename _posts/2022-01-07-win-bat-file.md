@@ -83,6 +83,7 @@ if (!(Test-Path -Path $PROFILE.AllUsersAllHosts)) {
     Out-File -FilePath $PROFILE.AllUsersAllHosts -Append
 }
 ```
+
 파워셀 재실행 
 에러발생시 에러 발생 하면 역시 관리자 권한으로
 ```shell
