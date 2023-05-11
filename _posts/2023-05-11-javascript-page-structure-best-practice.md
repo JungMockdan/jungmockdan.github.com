@@ -1,6 +1,6 @@
 ---
 title: "모듈화 유지보수용이 데이터노출 최소화 javascript 구조"
-date: 2021-12-23 13:26:28 -0400
+date: 2023-05-11 13:26:28 -0400
 categories: roadmap
 tags: javascript
 
