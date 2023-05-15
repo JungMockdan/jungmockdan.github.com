@@ -17,7 +17,8 @@ minimal_mistakes_skin    : "_dark" # "air", "aqua", "contrast", "default", "dirt
 
 # Site Settings
 locale                   : "en-US"
-title                    : "[하고x3] 하고, 실패하고, 다시하고"
+unpublished: false
+title: "[하고x3] 하고, 실패하고, 다시하고"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : "정목단"
@@ -28,6 +29,7 @@ repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-m
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 logo                     : # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
 masthead_title           : # overrides the website title displayed in the masthead, use " " for no title
+future: true
 # breadcrumbs            : false # true, false (default)
 words_per_minute         : 200
 comments:
