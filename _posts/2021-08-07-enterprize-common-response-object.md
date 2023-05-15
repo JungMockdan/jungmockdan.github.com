@@ -2,7 +2,7 @@
 title: 공통응답객체의 예시
 date: 2021-08-07 16:52:39 -0400 
 categories: design
-tags: java design
+tags: java best-practice
 
 
 # 목차
