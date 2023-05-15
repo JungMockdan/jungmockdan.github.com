@@ -1,8 +1,11 @@
 ---
 title: "Window powershell에서 웹리퀘스트 테스트하기"
+
 date: 2021-12-23 13:26:28 -0400
-categories: roadmap
-tags: 테스트 제한된 개발환경 파워쉘
+
+categories: env
+
+tags: dev-testing
 
 
 # 목차
