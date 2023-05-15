@@ -67,7 +67,7 @@ toc_sticky: true
 마크다운 상단에 아래를 참고 응용하여 정의하고, 위의 html 등에서 사용할 수 있습니다. 다만 `YAML front matters`를 사용하겠다고 체크해야 합니다.
 ```yaml
 ---
-title: 제목
+title: "제목"
 team: 매일매일더좋은나
 author: 나의 이름은 홍길동
 subject: 주제는 무엇으로 할까...
