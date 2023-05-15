@@ -80,7 +80,8 @@ var myModule = (function() {
 // 모듈 사용 예시
 console.log(myModule.publicVariable); // "I am a public variable"
 myModule.publicFunction(); // "I am a public function"와 "I am a private function" 출력
-위 코드에서 myModule 변수는 즉시 실행 함수로 선언되며, 반환된 객체에 대한 참조를 저장합니다. 내부에는 private 변수와 함수, public API가 정의되어 있습니다. private 변수와 함수는 외부에서 접근할 수 없으며, public API만을 통해 접근할 수 있습니다.
+// 위 코드에서 myModule 변수는 즉시 실행 함수로 선언되며, 반환된 객체에 대한 참조를 저장합니다. 내부에는 private 변수와 함수, public API가 정의되어 있습니다. private 변수와 함수는 외부에서 접근할 수 없으며, public API만을 통해 접근할 수 있습니다.
+
 ```
 
 이러한 모듈 패턴을 사용하면 전역 네임스페이스를 오염시키지 않고도 모듈 간의 의존성 관리와 코드 구조화를 용이하게 할 수 있습니다. 또한, 모듈화를 통해 코드의 재사용성과 유지보수성을 높일 수 있습니다.
