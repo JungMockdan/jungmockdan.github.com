@@ -4,9 +4,9 @@
 
 @charset "utf-8";
 
-@import "../../_sass/minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
+@import "_sass/minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
 //@import "../../_sass/minimal-mistakes/skins/_dark.scss";
-@import "../../_sass/minimal-mistakes"; // main partials
+@import "_sass/minimal-mistakes"; // main partials
 // Font 변경
 @import url('https://fonts.googleapis.com/css?family=Inconsolata');
 $serif              : "Inconsolata", monospace, "PT Serif", Georgia, Times, serif;
