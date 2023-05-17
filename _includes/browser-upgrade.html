@@ -1,0 +1,46 @@
+/* home.getBigBannerList */
+		SELECT
+		    BN.SEQ
+			, BN.TITLE
+			, CNTS_TYP
+			, IFNULL(PC_LIST_COLOR, 'B') as pcListColor
+			, IFNULL(PC_CNTS, '') as pcCnts
+			, IFNULL(PC_IMG,'') as pcImgPath
+			, IFNULL(PC_IMG_ALT,'') as pcImgAlt
+			, IFNULL(PC_LINK,'') as pcLinkUrl
+			, IFNULL(PC_LINK_FLAG,'') as pcLinkFlag
+			, IFNULL(BN.PC_SORT_NO,0) as pcSortOrd
+			, IFNULL(MO_CNTS,'') as moCnts
+			, IFNULL(MO_IMG,'') as moImgPath
+			, IFNULL(MO_IMG_ALT,'') as moImgAlt
+			, IFNULL(MO_LINK,'') as moLinkUrl
+			, IFNULL(MO_LINK_FLAG,'') as moLinkFlag
+			, IFNULL(BN.MO_SORT_NO,0) as moSortOrd
+			, IFNULL(BN.APP_CNTS, '') as appCnts  
+			, IFNULL(BN.APP_IMG, '') as appImgPath  
+			, IFNULL(BN.APP_LINK_FLAG, '') as appLinkFlag
+			, IFNULL(BN.APP_LINK, '') as appLink    
+			, IFNULL(BN.PC_TEXT_SORT, '') as pcTextSort 
+			, IFNULL(BN.MO_TEXT_SORT, '') as moTextSort
+			, IFNULL(BN.APP_TEXT_SORT, '') as appTextSort
+			, IFNULL(BN.PC_TEXT_COL, '') as pcTextCol  
+			, IFNULL(BN.MO_TEXT_COL, '') as moTextCol  
+			, IFNULL(BN.APP_TEXT_COL, '') as appTextCol 
+			, IFNULL(BN.PC_BG_COL, '') as pcBgCol    
+			, IFNULL(BN.MO_BG_COL, '') as moBgCol    
+			, IFNULL(BN.APP_BG_COL, '') as appBgCol   
+			, IFNULL(BN.PC_BG_IMG, '') as pcBgImg    
+			, IFNULL(BN.MO_BG_IMG, '') as moBgImg    
+			, IFNULL(BN.APP_BG_IMG, '') as appBgImg   
+		FROM TB_CM_BANN_BIG BN
+		WHERE BN.USE_YN = 'Y'
+		  AND BN.DEL_YN = 'N'
+		  AND BN.BANN_BIG_DV = '001'
+		  AND (BN.VIEW_FLAG = 'A' OR BN.VIEW_FLAG LIKE CONCAT('%', 'P', '%'))
+		  AND (BN.AUTH_FLAG = 'A' OR BN.AUTH_FLAG LIKE CONCAT('%', 'BL', '%'))
+		  AND NOW()   >=   BN.STRT_DTE
+		  AND BN.END_DTE   >=   NOW()
+
+				ORDER BY BN.PC_SORT_NO ASC, BN.CRT_DTE DESC
+ {executed in 15661 msec}
+23-05-17 13:15:19 DEBUG [http-nio-8888-exec-2] [getBigBannerList:143] - <==      Total: 2
