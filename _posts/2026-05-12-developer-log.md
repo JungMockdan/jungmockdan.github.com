@@ -2,7 +2,7 @@
 title: "개발일지 — 2026-05-12"
 excerpt: "Planet645 — TNB·내 정보 드로어·설정 허브·약관·크레딧, Thymeleaf Security, 레이아웃 header화. 기존: 당첨 수집·DB·추천 UI·collation·artifact·보드."
 date: 2026-05-12 12:00:00 +0900
-last_modified_at: 2026-05-12 18:00:00 +0900
+last_modified_at: 2026-05-13 10:00:00 +0900
 categories: [deVlog]
 tags: [planet645, spring, jekyll, 개발일지]
 toc: true
@@ -165,6 +165,8 @@ Illegal mix of collations
 
 ### 2.8 문서 저장소 리팩토링 (`artifact/`)
 
+> 작성: 2026-05-12 / 마지막 갱신: 2026-05-13. 본문은 어제 작업을 그대로 두고, 후속 정리는 아래 별도 절(後속)에 분리해 둔다.
+
 앱·ML 프로젝트 `docs/` 트리에 흩어져 있던 문서를 워크스페이스 공통 저장소 `artifact/`로 통합했다. 분류는 수명주기(`prd / design / runbook / plan / devlog / archive`)와 주제(`api, data-model, user-identity, billing-subscription, recommendation-ml, ui, decisions`)를 함께 쓰는 2축 구조로 잡았다.
 
 | 항목 | 내용 |
@@ -175,7 +177,7 @@ Illegal mix of collations
 | 네이밍 | kebab-case 일관화 (`legacy-docs-index.md`, `v0dev-global-first-prompt.md`, `oauth-conflict-resolution.md`, `artifact-binary-fairy-fix.md` 등) |
 | 인덱스 | `artifact/README.md`(분류 기준), `artifact/DOCS_INDEX.md`(전체 매핑) 신설 |
 | 참조 수정 | `CLAUDE.md`, `.claude/tasks/board.xml`, `archive-history.xml`, `ex_task.xml`, `schema/structure.xml`, 그리고 이동된 문서들의 내부 상대 링크 일괄 정정 |
-| 검증 | `docs/...`, `ai-llm-plan-v0`, 구 파일명, `[planned]` 등 잔존 참조 0건 |
+| 당시 검증 | 작업 시점 스윕에서 `docs/...`, `ai-llm-plan-v0`, 구 파일명, `[planned]` 등 잔존 참조 0건 |
 
 관련 파일:
 
@@ -183,6 +185,29 @@ Illegal mix of collations
 - [`artifact/DOCS_INDEX.md`][artifactDocsIndex]
 - [`com.mockdan.life-saver-lotto/docs/README.md`][appDocsReadme]
 - [`com.mockdan.life-saver-lotto-ml/docs/README.md`][mlDocsReadme]
+
+#### 후속 (2026-05-13)
+
+위 변경분은 같은 날 commit되지 않고 `git stash` 3개로 보존됐다가 다음 날 모두 staging에 재적용했다. 그 사이 별도로 commit된 `artifact/as-built/` Layer 0 토픽 시트 8장(`monorepo-runtime, recommendation-pipeline, auth-oauth, ui-thymeleaf, ml-service, llm-service, billing-entitlement, ops-smoke-e2e`)과 충돌 없이 **공존**하도록 정리했다.
+
+| 항목 | 내용 |
+|---|---|
+| Layer 모델 | `as-built/`(Layer 0 요약) ↔ `prd / design / runbook`(Layer 1 SoT) ↔ `plan / analyze / devlog / ref / archive`(Layer 2)로 명시 |
+| as-built README | Layer 2 인덱스에 `prd/`, `design/`, `runbook/{backend,setup,sql}/`, `devlog/`, `ref/`, `archive/` 추가. 옛 “Planning and tracking”을 “Detailed sources”로 변경하고 `DOCS_INDEX.md` 포인터 추가 |
+| 8개 토픽 | 각 시트에 `artifact/design/...`, `artifact/prd/...`, `artifact/runbook/...` SoT cross-link 한 줄씩 보강. `auth-oauth.md`의 끊긴 `plan/oauth-conflict-resolution-complete.md` 참조도 `plan/done/oauth-conflict-resolution.md`로 정정 |
+| 인덱스 | `artifact/README.md`에 3-Layer 구조 표 + `as-built/` 카테고리 도입, `artifact/DOCS_INDEX.md`에 `as-built/` 8개 시트 항목 추가 |
+| 파일명 | `devlog/technical-improvements-summary.md` → `devlog/2026-04-02-technical-improvements-summary.md`로 날짜 prefix 통일(`git mv`로 history 보존). 참조 4건 동시 정정 (`DOCS_INDEX.md`, `2026-04-02-handoff.md`, `ai-development-detailed-plan.md`. archive 안쪽 옛 표기는 역사적 정확성을 위해 유지) |
+| 용어 통일 | `journal` 표기 폐기, **`devlog`로 통일**. `CLAUDE.md`/`AGENTS.md`(심링크)에 워크스페이스 내부 보관 위치 = `artifact/devlog/`로 명시 |
+| Submodule 정리 | 워크스페이스 repo가 `jungmockdan.github.com`을 gitlink(mode `160000`)로 들고 있었으나 `.gitmodules`는 없는 비정상 상태였음을 확인. 사용자 결정에 따라 gitlink 제거를 그대로 두고 publish repo는 형제 디렉터리로 분리 운영. `.claude/worktrees/oauth-conflict-resolution`도 동일하게 gitlink 제거 |
+| 최종 스윕 | `docs/...`, `ai-llm-plan-v0`, 구 파일명, `[planned]`, `journal/` 등 깨진 참조 0건. 의도적 잔존 2건만 화이트리스트 — `.claude/tasks/board.xml`의 “구 PRD 경로는 비어 있음” 안내 메모, `com.mockdan.life-saver-lotto-ml/docs/README.md`의 “이전 파일 → 새 위치” 매핑표 |
+| 현재 staging 규모 | 워크스페이스 89건(artifact 신규/이동·rename + 참조 수정 + gitlink 2건 제거). 앱·ML repo는 clean. publish repo는 본 글 1건 modified + `.gitignore` untracked |
+
+#### 남은 작업
+
+- 워크스페이스 repo · publish repo 두 곳에 분리 commit·push (앱·ML repo는 이전 단계에서 이미 정리됨)
+- LLM 서비스(`com.mockdan.life-saver-lotto-llm/`)는 `docs/` 신설 또는 `artifact/` 흡수 정책 결정
+- `.cursorignore` 12행 `*.pyc\` 매달린 백슬래시 정리 (Cursor `rg` 도구 정상화)
+- `artifact/` 내부 상대 링크 정합성 정기 점검 (월 1회 정도)
 
 ---
 
