@@ -426,19 +426,20 @@ logging.level.org.hibernate.orm.jdbc.bind=TRACE
 
 ### Planet645
 
-- [ ] `POST /auth/admin/batch/lottery-win`에 `@RequestBody` 병행이 필요한지 검토
+- [x] `POST /auth/admin/batch/lottery-win`에 `@RequestBody` 병행이 필요한지 검토
 - [ ] HTML 폴백이 부족할 경우 Selenium 기반 후속 작업 검토
 - [x] `mypage-drawer.md` 기준 1차 구현(TNB·드로어·허브·약관·크레딧) — 브랜치 `feature/tnb-myinfo-drawer-settings` 푸시
-- [ ] 위 브랜치 PR 머지 및 스모크·회귀 확인
+- [ ] `feature/tnb-myinfo-drawer-settings` 브랜치 PR 머지 
+- [ ] 스모크·회귀 확인
 
 ### 개발 운영
 
-- [ ] `board.xml`의 `metadata/lastUpdated` 점검
+- [x] `board.xml`의 `metadata/lastUpdated` 점검
 - [ ] 스테이징 점검 태스크를 보드 정책에 맞게 반영
-- [ ] `artifact/` 리팩토링 결과를 워크스페이스·앱·ML repo에 각각 커밋·푸시
-- [ ] LLM 서비스(`com.mockdan.life-saver-lotto-llm/`)도 `docs/` 신설 또는 `artifact/`로 흡수 여부 결정
-- [ ] `.cursorignore` 12행 `*.pyc\` 매달린 백슬래시 정리 (Cursor `rg` 도구 정상화)
-- [ ] `artifact/` 내부 상대 링크 정합성 추가 점검 (마이그레이션 직후 1회)
+- [x] `artifact/` 리팩토링 결과를 워크스페이스·앱·ML repo에 각각 커밋·푸시
+- [x] LLM 서비스(`com.mockdan.life-saver-lotto-llm/`)도 `docs/` 신설 또는 `artifact/`로 흡수 여부 결정
+- [x] `.cursorignore` 12행 `*.pyc\` 매달린 백슬래시 정리 (Cursor `rg` 도구 정상화)
+- [x] `artifact/` 내부 상대 링크 정합성 추가 점검 (마이그레이션 직후 1회)
 
 ---
 

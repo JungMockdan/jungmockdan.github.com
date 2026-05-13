@@ -2,7 +2,7 @@
 title: "개발일지 — 2026-05-13"
 excerpt: "MYPAGE-DRAWER-01 후속 — 스모크·E2E 회귀 + 로컬 전용 dev-login 백도어로 Playwright 인증 자동화. OAuth Provider 모킹(Option D)은 별도 작업으로 보류."
 date: 2026-05-13 12:00:00 +0900
-last_modified_at: 2026-05-13 19:00:00 +0900
+last_modified_at: 2026-05-13 15:10:00 +0900
 categories: [deVlog]
 tags: [planet645, smoke, e2e, playwright, security, 개발일지]
 toc: true
@@ -35,6 +35,11 @@ toc_sticky: true
 - [x] Windows + WSL2 Hyper-V 동적 포트 예약 우회 — `docker-compose.yml` 호스트 포트 기본값 `58080` → `${SPRING_PORT:-18080}`
 - [x] `/dashboard` 미인증 시 401 → 302 정정 — `SecurityConfig`에 `LoginUrlAuthenticationEntryPoint("/login")` 매처 추가
 - [x] Playwright E2E 6건 회귀 — stale 4건 surgical 수정, 구조 불일치 1건 skip-with-reason, 실 회귀 1건 후속 태스크로 분리
+- [x] `SECURITY-ENTRYPOINT-SSR-ROUTES-01` 마무리 — 잔여 SSR 4건(`/onboarding/**`, `/profile/setup/**`, `/subscribe/payment`, `/subscribe/success`)에 `LoginUrlAuthenticationEntryPoint("/login")` 매처 + 스모크 회귀 케이스 4건 추가. `./startup-and-smoke-test.sh --build` 결과 API 30/30 green (신규 4건 모두 302 PASS)
+- [x] `PHASE17-LOCAL-PROD-REGRESSION-01` 1차 시도 — docker compose + `docker-compose.override.yml`(`SPRING_PROFILES_ACTIVE=prod`) 경로로 진행. Step 0(check-dev-login-guard.sh) green. Step 1 기동 시 `ddl-auto=validate` 가 엔티티 ↔ DB 컬럼 타입 미스매치 3건 연속 노출 → blocked 처리, 후속 `PHASE17-PROD-VALIDATE-SCHEMA-DRIFT-01` 신설
+- [x] 보드 정합 — 백로그를 **소스 기준**으로 재검증해서 `MYPAGE-DRAWER-CREDIT-SUMMARY-01`(코드 단일 소스 `EntitlementService.getBalance()`로 이미 확정)·`SECURITY-ENTRYPOINT-SSR-ROUTES-01`(전 단계 마무리)을 `ArchivedTasks`로 이관. Playwright 환경 가드는 `PLAYWRIGHT-CHROMIUM-PREFLIGHT-01` 신규 백로그로 분리
+- [x] `PLAYWRIGHT-CHROMIUM-PREFLIGHT-01` 구현·아카이브 — Cursor 샌드박스에 chromium 1217(약 285MB) 설치 + `scripts/check-playwright-browser.sh` 신설 + `startup-and-smoke-test.sh` pre-flight 연결. cache hit 7ms, cache miss 시 자동 install. 가드 반영 후 사용자 측 `./startup-and-smoke-test.sh --build` 재실행 — **API 스모크·Playwright 포함 전부 green** 확인
+- [x] 보드 PHASE17 회귀 1차 시도 결과 반영 — `PHASE17-LOCAL-PROD-REGRESSION-01` `planned → blocked` + AgentNotes 회고 4줄, 후속 `PHASE17-PROD-VALIDATE-SCHEMA-DRIFT-01`(executionOrder=109) 신설(discover/implement/verify 3-Phase, Done 체크리스트 3개, AgentNotes 3개), `metadata/lastUpdated` 갱신
 
 ## 2. 주요 변경 사항
 
@@ -287,6 +292,196 @@ listen tcp 0.0.0.0:58080: bind: An attempt was made to access a socket in a way 
 
 ---
 
+### 2.9 `SECURITY-ENTRYPOINT-SSR-ROUTES-01` 마무리 — 잔여 SSR 4건 + 보드 정합
+
+§2.7에서 `/dashboard/**` 매처만 임시로 추가하고 동일 패턴의 잔여 SSR 라우트 4건은 보드 후속(`SECURITY-ENTRYPOINT-SSR-ROUTES-01`)으로 분리했었다. 사용자가 "개발일지 기준 말고 **소스 기준**으로 백로그 상태를 다시 확인하라"고 지시 — `SecurityConfig.java`·`smoke/spec/smoke-tests.json`·`templates/content/**`를 직접 SoT로 두고 대조하니 두 건의 어긋남을 발견했다.
+
+**소스 vs 보드 대조 결과**
+
+| Task | 보드 status (전) | 소스 사실 | 처리 |
+|---|---|---|---|
+| `MYPAGE-DRAWER-CREDIT-SUMMARY-01` | planned | `AuthenticatedLayoutModelAdvice:52-60` 드로어 모델·`CreditController:21-26` 잔액 API 둘 다 **`EntitlementService.getBalance(userId)`** 호출 → 코드 레벨 단일 소스 이미 확정 | **Archived 이관** |
+| `SECURITY-ENTRYPOINT-SSR-ROUTES-01` | planned (전 Step) | `/dashboard/**`만 매처+스모크 반영, **잔여 SSR 4건** 미반영 | `in-progress`로 갱신 후 잔여 구현 → Archived |
+
+**잔여 4건 구현**
+
+`SecurityConfig.java` line 80 이후 `defaultAuthenticationEntryPointFor` 블록 4개 추가:
+
+```java
+.defaultAuthenticationEntryPointFor(
+    new LoginUrlAuthenticationEntryPoint("/login"),
+    new AntPathRequestMatcher("/onboarding/**")
+)
+.defaultAuthenticationEntryPointFor(
+    new LoginUrlAuthenticationEntryPoint("/login"),
+    new AntPathRequestMatcher("/profile/setup/**")
+)
+.defaultAuthenticationEntryPointFor(
+    new LoginUrlAuthenticationEntryPoint("/login"),
+    new AntPathRequestMatcher("/subscribe/payment")
+)
+.defaultAuthenticationEntryPointFor(
+    new LoginUrlAuthenticationEntryPoint("/login"),
+    new AntPathRequestMatcher("/subscribe/success")
+)
+```
+
+→ `SecurityConfig`의 `.authenticated()` 9개 패턴이 전부 EntryPoint 매처에 명시 등재됨(API 1개 + SSR 8개).
+
+**스모크 스펙 회귀 케이스 4건 추가** (`smoke/spec/smoke-tests.json`)
+
+| URL | expectedStatus | allowRedirect |
+|---|---|---|
+| `/onboarding/features` | 302 | false |
+| `/profile/setup` | 302 | false |
+| `/subscribe/payment` | 302 | false |
+| `/subscribe/success` | 302 | false |
+
+**회귀 결과** (`./startup-and-smoke-test.sh --build`, 2026-05-13 13:50 KST)
+
+| 영역 | 결과 |
+|---|---|
+| API 스모크 | **30/30 green** — 신규 4건 모두 302 PASS (`smoke/artifacts/startup-smoke-report.json`) |
+| Playwright | 23/23 fail — **환경 이슈**(Cursor 샌드박스 chromium 미설치, `browserType.launch: Executable doesn't exist`). 본 변경 무관 → `PLAYWRIGHT-CHROMIUM-PREFLIGHT-01` 신규 backlog로 분리 |
+
+**보드 변경 요약**
+
+| Task | Active/Backlog → Archived | 비고 |
+|---|---|---|
+| `MYPAGE-DRAWER-CREDIT-SUMMARY-01` | Backlog → Archived | `completedAt=2026-05-11T10:00:00Z`(MYPAGE-DRAWER-01 완료 시점) |
+| `SECURITY-ENTRYPOINT-SSR-ROUTES-01` | Backlog → Active → Archived | `completedAt=2026-05-13T04:50:00Z` |
+| `PLAYWRIGHT-CHROMIUM-PREFLIGHT-01` | (신규) → Backlog | `startup-and-smoke-test.sh` pre-flight에 chromium 자동 설치 가드 추가 — 후속 |
+
+관련 파일:
+
+- [`SecurityConfig`][securityConfig]
+- [`smoke-tests.json`][smokeTestsJson]
+- [`AuthenticatedLayoutModelAdvice`][authenticatedLayoutModelAdvice]
+- [`CreditController`][creditController]
+- [`board.xml`][boardXml]
+
+---
+
+### 2.10 `PHASE17-LOCAL-PROD-REGRESSION-01` 1차 시도 — 회귀 가치 입증·blocked 처리
+
+오후에 plan ([phase17_local_prod_regression_guide][phase17PlanMd]) 대로 **로컬 prod-profile 회귀**를 step-by-step 실행. 결과: 회귀 절차의 가치 자체는 즉시 입증됐으나(운영 부팅 차단 종류의 미스매치를 PR 머지 전 발견), Step 1에서 부팅이 막혀 본 태스크는 blocked 처리하고 후속 태스크로 분리했다.
+
+**기동 경로 — `docker-compose.override.yml` 한 줄**
+
+기존 [`docker-compose.yml`][dockerComposeYml] line 76 `SPRING_PROFILES_ACTIVE: local`을 직접 편집하지 않고, 워크스페이스 루트에 임시 override 파일을 만들어 compose 자동 머지에 위임:
+
+```yaml
+services:
+  spring-app:
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+```
+
+`docker compose config | grep SPRING_PROFILES_ACTIVE` 로 머지 결과 확인(`prod`) 후 `docker compose up -d --build`. 컨테이너는 모두 healthy, Spring 로그도 `The following 1 profile is active: "prod"` 까지 정상.
+
+**진행 결과**
+
+| Step | 결과 |
+|---|---|
+| 0. `check-dev-login-guard.sh` | exit 0 — `application-local.properties`에만 `app.dev-login.enabled=true` |
+| 1. docker compose up (prod override) | 컨테이너 기동 완료, prod profile active, **그러나 EntityManagerFactory 초기화에서 schema-validation 에러로 부팅 실패** |
+| 2~6 | Step 1 차단으로 진행 불가 |
+
+**1차 수정 (로컬 미커밋, 다음 PR로 분리 예정)**
+
+`TWinBaseInfo.winAmountPerEach`의 Java 타입 `BigInteger`는 JPA 기본 매핑에서 SQL Types `NUMERIC(decimal(38,0))`이 되는데 DB 컬럼은 `bigint(20)`. 의도가 명확히 `bigint`였던 만큼 Java 타입을 `Long`으로 정렬하는 것이 의미적 변화 없는 정합 수정:
+
+| 파일 | 변경 |
+|---|---|
+| [`TWinBaseInfo`][TWinBaseInfo] | `BigInteger winAmountPerEach` → `Long`, `columnDefinition = "int default 0"` / `"bigint default 0"` 2줄 제거(DB DEFAULT는 V2 migration이 이미 보장), orphan import 정리 |
+| [`LotteryWinCrawler`][LotteryWinCrawler] | `base.setWinAmountPerEach(BigInteger.ZERO)` → `0L`, orphan import 정리 |
+| [`LifeSaverLottoApplication`][lifeSaverLottoApplicationJava] | `parseBigIntegerCell` → `parseLongCell` (`new BigInteger(...)` → `Long.valueOf(...)`), 호출/`mergeBaseInfo` 시그니처 정리, orphan import 정리 |
+
+검증: `./gradlew compileJava compileTestJava` 5s green, `./gradlew test --tests com.mockdan.lifesaverlotto.cmm.lottery.*` green. 다만 1차 수정 후 재기동에서도 다음 미스매치(`identities.identity_id` CHAR↔VARCHAR)가 노출돼 whack-a-mole이 시작될 위험이 명확해진 시점에 진행을 멈췄다.
+
+**보드 처리**
+
+| Task | 변경 |
+|---|---|
+| `PHASE17-LOCAL-PROD-REGRESSION-01` | `status="planned" → "blocked"`, AgentNotes 4줄 추가(1차 시도 회고·로컬 보존된 부산물·`blocked-by`) |
+| `PHASE17-PROD-VALIDATE-SCHEMA-DRIFT-01` | (신규, executionOrder=109) discover/implement/verify 3-Phase, Done 체크리스트 3개, AgentNotes 3개. 본 태스크 완료 시 회귀 blocked 해제 |
+
+**환경 회수**
+
+`docker compose down` (모든 컨테이너 + 네트워크 제거) → `rm docker-compose.override.yml`. 워킹 트리에서 override 파일 흔적 0.
+
+관련 파일:
+
+- [`board.xml`][boardXml]
+- [`docker-compose.yml`][dockerComposeYml]
+- [`TWinBaseInfo`][TWinBaseInfo]
+- [`LotteryWinCrawler`][LotteryWinCrawler]
+- [`LifeSaverLottoApplication`][lifeSaverLottoApplicationJava]
+- [`application-prod.properties`][appProdProps]
+- [plan: phase17 local prod regression guide][phase17PlanMd]
+
+---
+
+### 2.11 `PLAYWRIGHT-CHROMIUM-PREFLIGHT-01` 구현 — Cursor 샌드박스 chromium 자동 가드
+
+§2.9 회귀에서 Playwright 23/23 fail의 원인이 **Cursor 샌드박스에 chromium이 설치되지 않음**(`browserType.launch: Executable doesn't exist at /tmp/cursor-sandbox-cache/.../chromium_headless_shell-1217/...`)이었던 환경 이슈를 pre-flight 가드로 흡수했다. `scripts/check-dev-login-guard.sh`와 동일 패턴.
+
+**1) chromium 설치 (수동, 1회)**
+
+`PLAYWRIGHT_BROWSERS_PATH=/tmp/cursor-sandbox-cache/b333f107561744d966410c0bbcdae468/playwright`에 한 줄로 설치:
+
+```bash
+npx playwright install chromium
+```
+
+| 컴포넌트 | 다운로드 | 디스크 |
+|---|---|---|
+| Chrome for Testing 147.0.7727.15 | 170.4 MiB | 369M |
+| FFmpeg 1011 | 2.3 MiB | 4.9M |
+| Chrome Headless Shell 147.0.7727.15 | 112 MiB | 257M |
+| **합계** | **~285 MiB** | **~631M** |
+
+소요 14분(`exit_code: 0`, 849793ms). `--with-deps`는 샌드박스에 `sudo apt` 권한이 없어 사용하지 못했고, chromium 정적 빌드는 시스템 의존성 없이 동작하므로 영향 없음.
+
+**2) 가드 스크립트 — `scripts/check-playwright-browser.sh`**
+
+| 동작 | 결과 |
+|---|---|
+| `${PLAYWRIGHT_BROWSERS_PATH:-$HOME/.cache/ms-playwright}` 아래 `chrome-headless-shell`을 `find -executable`로 탐색 | 있으면 `[guard][ok]` + exit 0 (7ms) |
+| 없으면 `cd $WORKSPACE_ROOT` 후 `npx playwright install chromium` 자동 호출, 그 다음 재검사 | 성공 시 0, 실패 시 stderr 메시지 + exit 1 |
+| `--quiet` 옵션 | 성공 메시지 억제 (CI 로그용) |
+
+**3) `startup-and-smoke-test.sh` 연결**
+
+```bash
+# --- pre-flight guards ---
+"${WORKSPACE_ROOT}/scripts/check-dev-login-guard.sh"
+"${WORKSPACE_ROOT}/scripts/check-playwright-browser.sh"
+```
+
+**4) 단위 검증**
+
+| 분기 | 명령 | 결과 |
+|---|---|---|
+| Cache hit | `time ./scripts/check-playwright-browser.sh` | `[guard][ok]` + exit 0, **7ms** (real time) |
+| Cache miss → install 진입 | `timeout 3 env PLAYWRIGHT_BROWSERS_PATH=/tmp/nonexistent-... ./scripts/check-playwright-browser.sh` | `[guard] Playwright chromium not found...` → `[guard] Running: npx playwright install chromium` → 실제 다운로드 시작까지 진입 확인(timeout으로 중단, exit 124) |
+
+**5) 풀 회귀(사용자 확인)** — `check-playwright-browser.sh` 반영 후 `./startup-and-smoke-test.sh --build` 재실행하여 **API 스모크·Playwright 포함 전부 green** 확인. `PHASE17-LOCAL-PROD-REGRESSION-01`(로컬 prod-profile 회귀·b)은 사용자가 별도 진행 중.
+
+**휘발성 주의**
+
+`/tmp/cursor-sandbox-cache/`는 Cursor 세션 또는 OS `/tmp` 정책에 따라 사라질 수 있다. 다음 세션에서 chromium이 없으면 본 가드가 자동으로 재설치하므로 한 줄 명령(`./startup-and-smoke-test.sh --build`)으로 회귀가 자연 통과한다. 14분의 다운로드 시간이 추가될 뿐 절차는 동일.
+
+관련 파일:
+
+- [`check-playwright-browser.sh`][checkPlaywrightBrowserSh]
+- [`startup-and-smoke-test.sh`][startupSmokeSh]
+- [`check-dev-login-guard.sh`][checkDevLoginGuardSh]
+- [`playwright.config.ts`][playwrightConfig]
+- [`board.xml`][boardXml]
+
+---
+
 ## 3. 문제와 해결
 
 ### 3.1 미인증 페이지의 page-load 스모크가 의미를 가지려면
@@ -358,6 +553,21 @@ listen tcp 0.0.0.0:58080: bind: An attempt was made to access a socket in a way 
 
 ---
 
+### 3.6 prod-profile validate가 잡아낸 스키마 드리프트 — whack-a-mole 직전 정지
+
+| 구분 | 내용 |
+|---|---|
+| 현상 | `SPRING_PROFILES_ACTIVE=prod`로 띄우자 `application-prod.properties:23`의 `spring.jpa.hibernate.ddl-auto=validate` 가 EntityManagerFactory 초기화 단계에서 schema-validation 에러로 부팅을 차단. 한 번에 한 테이블만 잡고 멈추는 특성상 fix → 재기동마다 다음 미스매치가 줄줄이 노출 |
+| 발견 1 | `t_win_base_info.win_count` — `@Column(columnDefinition = "int default 0")`이 SQL Types 코드를 NUMERIC으로 강제, DB는 INTEGER. `expecting [int default 0 (Types#NUMERIC)]` vs `found [int (Types#INTEGER)]` |
+| 발견 2 | `t_win_base_info.win_amount_per_each` — Java `BigInteger`의 JPA 기본 매핑은 `decimal(38,0) (NUMERIC)`. DB는 `bigint(20) (BIGINT)`. 기존 `columnDefinition = "bigint default 0"`은 DDL 문자열만 흉내냈을 뿐 Types 코드는 여전히 NUMERIC. 1차 발견의 columnDefinition을 정리하니 본질이 드러남 |
+| 발견 3 | `identities.identity_id` — DB CHAR ↔ 엔티티 VARCHAR(255). 위 2건과는 또 다른 종류의 타입 미스매치 |
+| 1인 개발 누적 컨텍스트 | local 프로파일은 `ddl-auto=update`라 엔티티 변경이 자동 반영·드리프트 누적이 silent. validate가 처음 도입되는 prod-profile 부팅 시점에 누적분이 한꺼번에 노출되는 구조. **회귀 태스크가 정확히 막아내려는 종류** |
+| 본세션 처리 범위 | 1차(2건)만 의미적 변화 없는 정렬로 고침 — `BigInteger → Long`, `columnDefinition` 제거(DB DEFAULT는 V2 migration이 이미 보장). `compileJava`/`compileTestJava` + lottery 패키지 단위테스트 green. 발견 3 이후는 별도 태스크로 분리 |
+| 정지 판단 | 발견 3까지 노출된 시점에 patterns가 단일 quirk가 아니라 **시스템 정리 작업** 임이 명확해짐. 한 세션에서 whack-a-mole로 끌고 가는 것은 plan 스코프를 벗어남 + 실수 위험. 1차 수정만 로컬 보존하고 본 태스크는 blocked, 후속 `PHASE17-PROD-VALIDATE-SCHEMA-DRIFT-01` 신설 |
+| 장기 후속 sharp edge | 본 태스크가 잡아낸 종류의 회귀를 PR 머지 전 자동으로 막으려면 `startup-and-smoke-test.sh` 또는 별도 CI 스텝에 prod-profile 1회 기동 검증을 끼우는 것이 정공법. 본세션 미반영(스코프 외) — `PHASE17-PROD-VALIDATE-SCHEMA-DRIFT-01` AgentNotes에 후보로만 기록 |
+
+---
+
 ### 개발 운영
 
 _(해당 없음)_
@@ -372,18 +582,24 @@ _(해당 없음)_
 
 - **인증 세션 옵셔널 패턴**(`HAS_AUTH = existsSync('auth.json')`)은 CI/로컬 양쪽에서 의미 있는 부분 회귀를 보존해 준다. 6건의 미인증 가드는 항상 돌고, 3건의 인증 렌더는 세션이 있을 때만 돈다.
 
+- **`ddl-auto=update`는 silent driver of drift, `validate`는 exposer.** 1인 개발에서 local 프로파일만 띄워 왔다면 엔티티 ↔ DB ↔ Flyway 3자 정합이 어긋나도 인지 못 할 수 있다. prod-profile validate 1회 기동을 PR 머지 전 자동 가드로 두면 운영 부팅 차단 종류의 회귀를 한 단계 앞에서 잡는다. 본세션은 이 절차 자체의 가치를 실제 사례로 입증한 회차.
+
+- **whack-a-mole 직전 멈춰서 후속 분리.** validate가 한 번에 한 테이블만 잡고 멈추는 특성상 fix-rebuild를 반복하면 한 세션이 무한정 늘어진다. 패턴이 단일 quirk가 아니라 시스템 정리임이 명확해지는 시점(본세션의 경우 3건째)에 멈추고 후속 태스크로 분리하면 1차 수정의 의미는 살리고 다음 세션이 인지된 상태로 시작된다.
+
 ---
 
 ## 5. 다음 액션
 
 ### Planet645
 
-- [ ] `feature/tnb-myinfo-drawer-settings` 브랜치 PR 머지 (스모크·E2E 회귀 + dev-login 백도어 포함)
-- [ ] PR 머지 직전 보드 태스크 `PHASE17-LOCAL-PROD-REGRESSION-01` 실행(로컬 prod-profile 기동 → API 스모크·Playwright·수동 UI·dev-login 404 증거)
-- [ ] 로컬에서 `./startup-and-smoke-test.sh` 통합 실행 — 26건 API + 10건 E2E 전부 green + `globalSetup`이 `auth.json` / `auth-admin.json` 생성하는지 확인
+- [x] `feature/tnb-myinfo-drawer-settings` 브랜치 PR 머지 (스모크·E2E 회귀 + dev-login 백도어 포함)
+- [ ] **`PHASE17-PROD-VALIDATE-SCHEMA-DRIFT-01`** — 본세션 1차 수정(TWinBaseInfo 정렬)을 흡수 또는 분리 PR로 정리 + 발견 3(`identities.identity_id` CHAR↔VARCHAR) 이후 validate 에러 enumerate·일괄 정렬. 완료 시 회귀 blocked 해제
+- [ ] `PHASE17-LOCAL-PROD-REGRESSION-01` — 위 schema 후속 완료 시 `status="blocked" → "planned"`로 풀고 plan ([phase17 local prod regression guide][phase17PlanMd]) Step 1부터 재실행(로컬 prod-profile 기동 → API 스모크·Playwright·수동 UI·dev-login 404 증거). **prod-profile 회귀 본선은 사용자 진행 중**; blocked 해제·보드 정합은 schema 태스크와 연동
+- [x] 로컬에서 `./startup-and-smoke-test.sh --build` 통합 실행 — 사용자 확인 **전부 green**(API 스모크 + Playwright). `globalSetup`·`auth.json` / `auth-admin.json` 동작은 동일 회귀에서 함께 확인됨
 - [ ] Option D — OAuth Provider WireMock 모킹 (`SiteOAuth2UserService` · `SiteOidcUserService` · `OAuth2LoginSuccessHandler` 회귀) 별도 작업 착수
 - [ ] HTML 폴백이 부족할 경우 Selenium 기반 후속 작업 검토 *(어제 잔존)*
-- [ ] `SECURITY-ENTRYPOINT-SSR-ROUTES-01` — `SecurityConfig`의 `.authenticated()` 경로(`/onboarding/**`, `/profile/setup/**`, `/subscribe/payment`, `/subscribe/success` 등)에 SSR/API 분류 따라 EntryPoint 매처를 일괄 등재. 현재는 `/dashboard`만 정정됨
+- [x] `SECURITY-ENTRYPOINT-SSR-ROUTES-01` — 잔여 SSR 4건(`/onboarding/**`, `/profile/setup/**`, `/subscribe/payment`, `/subscribe/success`)에 `LoginUrlAuthenticationEntryPoint("/login")` 매처 + 스모크 회귀 케이스 4건 추가. `./startup-and-smoke-test.sh --build` 결과 API 30/30 green(신규 4건 모두 302 PASS). Backlog → Active → Archived
+- [x] 보드 백로그 소스 기준 재검증 — `MYPAGE-DRAWER-CREDIT-SUMMARY-01`(코드 단일 소스 `EntitlementService.getBalance()` 이미 확정) Archive 이관. Playwright 환경 가드는 `PLAYWRIGHT-CHROMIUM-PREFLIGHT-01` 신규 백로그로 분리
 - [x] `DEVLOGIN-ONBOARDING-FIX-01` — `OnboardingController`에서 `CurrentUserIdResolver` 재사용으로 사설 resolve 제거. 도커 재빌드 후 Playwright 전체 22 passed / 1 의도 skip / 0 failed로 확정. 유사 미가드 사이트 없음(8 사이트 전수 검사 완료)
 
 ### 개발 운영
@@ -391,6 +607,7 @@ _(해당 없음)_
 - [x] `scripts/check-dev-login-guard.sh` 신설 — `app.dev-login.enabled=true`가 `application-local.properties` 외에 있으면 exit 1. `startup-and-smoke-test.sh` pre-flight 단계 연결 (운영 배포 파이프라인에서도 동일 스크립트 호출 가능)
 - [x] Playwright `reporter` HTML 출력 폴더를 `playwright-report/`로 분리해 사전부터 있던 Configuration Error 경고 해소
 - [x] PR 후 회귀 태스크를 보드 정책에 맞게 반영 — `PHASE17-LOCAL-PROD-REGRESSION-01` (`board.xml` Backlog, verify 단일 Phase·체크리스트·AgentNotes; 이 프로젝트는 staging 환경 없음을 명시)
+- [x] `PLAYWRIGHT-CHROMIUM-PREFLIGHT-01` — `scripts/check-playwright-browser.sh` 신설 + `startup-and-smoke-test.sh` pre-flight 연결. cache hit 7ms, cache miss 시 `npx playwright install chromium` 자동 호출. chromium 1217(~285MB) 설치 후 사용자 측 `./startup-and-smoke-test.sh --build`로 **전부 green** 확인. Active → Archived
 
 ---
 
@@ -434,3 +651,12 @@ _(해당 없음)_
 [securityConfig]: ../../com.mockdan.life-saver-lotto/src/main/java/com/mockdan/lifesaverlotto/cmm/security/SecurityConfig.java
 [appProps]: ../../com.mockdan.life-saver-lotto/src/main/resources/application.properties
 [appLocalProps]: ../../com.mockdan.life-saver-lotto/src/main/resources/application-local.properties
+[authenticatedLayoutModelAdvice]: ../../com.mockdan.life-saver-lotto/src/main/java/com/mockdan/lifesaverlotto/ui/AuthenticatedLayoutModelAdvice.java
+[creditController]: ../../com.mockdan.life-saver-lotto/src/main/java/com/mockdan/lifesaverlotto/credit/api/CreditController.java
+[checkPlaywrightBrowserSh]: ../../scripts/check-playwright-browser.sh
+
+[TWinBaseInfo]: ../../com.mockdan.life-saver-lotto/src/main/java/com/mockdan/lifesaverlotto/recommendation/entity/TWinBaseInfo.java
+[LotteryWinCrawler]: ../../com.mockdan.life-saver-lotto/src/main/java/com/mockdan/lifesaverlotto/cmm/lottery/LotteryWinCrawler.java
+[lifeSaverLottoApplicationJava]: ../../com.mockdan.life-saver-lotto/src/main/java/com/mockdan/lifesaverlotto/LifeSaverLottoApplication.java
+[appProdProps]: ../../com.mockdan.life-saver-lotto/src/main/resources/application-prod.properties
+[phase17PlanMd]: ../../.cursor/plans/phase17_local_prod_regression_guide_4685523b.plan.md
