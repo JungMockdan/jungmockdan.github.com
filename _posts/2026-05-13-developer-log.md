@@ -1,10 +1,10 @@
 ---
 title: "개발일지 — 2026-05-13"
-excerpt: "MYPAGE-DRAWER-01 후속 회귀·보드 정리 + 같은 날 약관·동의 PRD·설계(v0.2.2) 문서 정리."
+excerpt: "MYPAGE-DRAWER-01 후속 회귀·보드 정리·스모크·Playwright·dev-login·로컬 prod-profile 회귀 시도까지."
 date: 2026-05-13 12:00:00 +0900
-last_modified_at: 2026-05-13 21:30:00 +0900
+last_modified_at: 2026-05-15 12:00:00 +0900
 categories: [deVlog]
-tags: [planet645, smoke, e2e, playwright, security, terms, prd, artifact, 개발일지]
+tags: [planet645, smoke, e2e, playwright, security, 개발일지]
 toc: true
 toc_sticky: true
 ---
@@ -615,20 +615,6 @@ _(해당 없음)_
 
 이 글은 2026-05-13 세션에서 추가·검증한 스모크/E2E 스펙 변경 범위를 요약한다.  
 코드와 불일치할 경우 저장소(`smoke/spec/smoke-tests.json`, `smoke/e2e/mypage-drawer.spec.ts`)의 최신 상태를 기준으로 한다.
-
----
-
-## 7. (같은 날 추가) 약관·동의 문서
-
-### Planet645
-
-- **PRD:** [`artifact/prd/terms-consent.md`](../../artifact/prd/terms-consent.md) — 개정 **구분값**(EXPLICIT/IMPLICIT), 마이페이지 **동의 조회 전용**, 재동의 **전용 페이지**, 약관 전문·보관 정책 등.
-- **설계:** [`artifact/design/terms-consent/01-schema-revision-guards.md`](../../artifact/design/terms-consent/01-schema-revision-guards.md) **v0.2.2** — `term_id` FK, `terms` **`(term_key, term_version)` UNIQUE**, MariaDB **temporal** + JPA 엔티티 분리, 라우트 **`/terms/view`**(전문·공개)·**`/terms-agreements`**(동의 조회·인증)·**`/terms-agreement`**(재동의), **고시 DB 조회 → Redis** 게이트, 배치·동시 로그인·중복 POST 등. 약관 **본문·목록·E(제3자) 행 수**는 **운영 데이터/mock**으로 두고 개발 블로커에서 제외.
-- **인덱스:** [`artifact/DOCS_INDEX.md`](../../artifact/DOCS_INDEX.md)에 PRD·설계 링크 반영.
-
-### 개발 운영
-
-- **코드 변경:** 없음(문서만). 이행·Redis TTL·plan 문서는 후속.
 
 ---
 

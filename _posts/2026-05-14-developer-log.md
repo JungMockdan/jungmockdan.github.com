@@ -1,7 +1,8 @@
 ---
 title: "개발일지 — 2026-05-14"
-excerpt: "약관·동의·개정 이행 plan 초안(`artifact/plan/terms-consent-implementation.md`) — PRD·설계 SoT와 Phase A–G·검증 매트릭스 정리."
+excerpt: "약관·동의 SoT(PRD·설계 v0.2.2·DOCS_INDEX) 일지 반영 + 이행 plan 초안(`artifact/plan/terms-consent-implementation.md`) — Phase A–G·검증 매트릭스."
 date: 2026-05-14 12:00:00 +0900
+last_modified_at: 2026-05-15 12:00:00 +0900
 categories: [deVlog]
 tags: [planet645, terms, consent, prd, design, artifact, 개발일지]
 toc: true
@@ -10,7 +11,7 @@ toc_sticky: true
 
 # 개발일지 — 2026-05-14
 
-> [어제 2026-05-13 일지](/2026-05-13-developer-log)에서 마이페이지·스모크·Playwright·약관 PRD·설계(v0.2.2)까지 정리된 뒤, 같은 주제의 **이행 계획(plan)** 을 워크스페이스에 추가했다. 코드 변경은 없고 산출물은 문서 한 건이다.
+> [어제 2026-05-13 일지](/2026-05-13-developer-log)에서 마이페이지·스모크·Playwright 회귀를 정리했고, 본 일지 **§7**에 약관·동의 SoT(PRD·설계 v0.2.2·인덱스)를 모았다. 같은 주제의 **이행 계획(plan)** 은 `artifact/plan/terms-consent-implementation.md` 로 추가했다. 코드 변경은 없고 산출물은 문서다.
 
 ---
 
@@ -18,6 +19,7 @@ toc_sticky: true
 
 ### Planet645
 
+- [x] 약관·동의 SoT 문서 링크·요약을 일지 §7에 정리(전일 작업을 올바른 날짜 문서로 이관)
 - [x] 약관·동의·개정 PRD·설계 SoT에 맞춘 **이행 plan** 초안 작성
 - [ ] plan에 적은 Phase A(G) 실제 구현 — **후속 세션**
 
@@ -84,3 +86,17 @@ _(해당 없음)_
 ## 6. 기준
 
 이 일지는 워크스페이스 `CLAUDE.md`의 개발일지 경로 규칙(`jungmockdan.github.com/_posts/`, Jekyll 프론트 매터)을 따른다. 본문 Planet645 / 개발 운영 분리는 워크스페이스 `.cursor/rules/jekyll-devlog-github-pages.mdc`와 맞춘다.
+
+---
+
+## 7. 약관·동의 문서 (SoT)
+
+### Planet645
+
+- **PRD:** [`artifact/prd/terms-consent.md`](../../artifact/prd/terms-consent.md) — 개정 **구분값**(EXPLICIT/IMPLICIT), 마이페이지 **동의 조회 전용**, 재동의 **전용 페이지**, 약관 전문·보관 정책 등.
+- **설계:** [`artifact/design/terms-consent/01-schema-revision-guards.md`](../../artifact/design/terms-consent/01-schema-revision-guards.md) **v0.2.2** — `term_id` FK, `terms` **`(term_key, term_version)` UNIQUE**, MariaDB **temporal** + JPA 엔티티 분리, 라우트 **`/terms/view`**(전문·공개)·**`/terms-agreements`**(동의 조회·인증)·**`/terms-agreement`**(재동의), **고시 DB 조회 → Redis** 게이트, 배치·동시 로그인·중복 POST 등. 약관 **본문·목록·E(제3자) 행 수**는 **운영 데이터/mock**으로 두고 개발 블로커에서 제외.
+- **인덱스:** [`artifact/DOCS_INDEX.md`](../../artifact/DOCS_INDEX.md)에 PRD·설계 링크 반영.
+
+### 개발 운영
+
+- **코드 변경:** 없음(문서만). 이행·Redis TTL·plan 본문은 §2.1 및 후속 세션.
