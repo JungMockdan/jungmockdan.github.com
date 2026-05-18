@@ -1,12 +1,12 @@
 ---
 title: "개발일지 — TNB·내 정보 드로어 병합 및 선택 약관 사후 동의"
-excerpt: "드로어·설정 허브 병합 후, 마이페이지에서 마케팅 미동의 시 수신 채널을 켤 수 없던 UX 공백을 optional-terms 플로우로 해소했다."
+excerpt: "드로어 병합·선택 약관 사후 동의에 이어, /profile/setup 만 18세 이하 decline·PRD/design 역정합·수동 verify 가이드 handoff까지 정리했다."
 categories: [deVlog]
 tags: [planet645, spring, thymeleaf, tnb, mypage, merge, 개발일지]
 toc: true
 toc_sticky: true
 date: 2026-05-18 12:00:00 +0900
-last_modified_at: 2026-05-18 21:30:00 +0900
+last_modified_at: 2026-05-19 12:00:00 +0900
 ---
 
 ## 1. 오늘 목표
@@ -17,11 +17,14 @@ last_modified_at: 2026-05-18 21:30:00 +0900
 - [x] `feature/tnb-myinfo-drawer-settings` → `main` 병합
 - [x] 앱 기동 실패(`Ambiguous mapping` on `/mypage/profile`) 해결
 - [x] `TERMS-OPTIONAL-CONSENT-MYPAGE-01` — 마이페이지 선택 약관(마케팅) 사후 동의 UX
+- [x] `AUTH-LOGOUT-ZERO-01` — 로그아웃 제로베이스 PRD 확정(Q1–Q8) 및 평가 보완 메모
+- [x] `TERMS-MINOR-AGE-DECLINE-01` — implement + PRD/design/plan 역정합
+- [ ] `TERMS-MINOR-AGE-DECLINE-01` — 수동 verify ([가이드](../../artifact/ops/verify/TERMS-MINOR-AGE-DECLINE-01-manual-verify.md))
 
 ### 개발 운영
 
 - [x] 수동 merge 진행분 폐기 후 깨끗한 상태에서 재병합
-- [ ] `main` 원격 push(필요 시)
+- [ ] `main` 원격 push(필요 시) — §5.3 개발 운영
 
 ## 2. 주요 변경 사항
 
@@ -81,9 +84,52 @@ Ambiguous mapping: POST [/mypage/profile]
 
 **플로우:** 마케팅 수신 수단(미동의) → 선택 약관 동의 → 동의 저장 → 수신 수단에서 채널 ON.
 
-### 2.5 개발 운영
+### 2.6 만 18세 이하 decline — `TERMS-MINOR-AGE-DECLINE-01` (Planet645)
 
-_(해당 없음 — 오늘 작업은 저장소 병합·기동 수정 중심)_
+**배경:** `/profile/setup`은 생년월일 `AgePolicy` 검증만 있고, 「만 18세 이하」 자진 신고·소셜 정리 UX가 없었다.
+
+**제품 결정:** 재로그인 허용 · `/profile/setup`만 · 안내 `login?info=minor_ineligible`.
+
+**구현 요약:**
+
+| 항목 | 내용 |
+|------|------|
+| API | `POST /profile/setup/decline-minor` — `MinorAgeDeclineService`, 세션 정리, `SecurityContextLogoutHandler` |
+| UI | `setup.html` — 「만 19세 이상입니다」+ `ProfileAgeGuard` + 「만 18세 이하입니다」(`window.confirm`) |
+| 로그인 | `login.html` — `info=minor_ineligible` info 배너 |
+| 감사 | `IdentityAuditLog.MINOR_AGE_DECLINED` (identity 있을 때) |
+| 테스트 | `ProfileSetupControllerTest`, `MinorAgeDeclineServiceImplTest` |
+
+**문서 역정합:** `terms-consent.md` §3.1 C · `02-future-minor-age-declaration-flow.md` · plan §9 Phase H · 보드 `review_pending`.
+
+**Handoff:** 수동 verify SoT — [`artifact/ops/verify/TERMS-MINOR-AGE-DECLINE-01-manual-verify.md`](../../artifact/ops/verify/TERMS-MINOR-AGE-DECLINE-01-manual-verify.md) (다른 세션에서 §3.2–3.4 실행).
+
+### 2.5 로그아웃 제로베이스 — `AUTH-LOGOUT-ZERO-01` (Planet645)
+
+**배경:** as-built는 드로어 GET `/logout`, 재동의 POST, Spring `logoutSuccessUrl("/")` 고정 등이 혼재. 상위 PRD의 `POST /api/v1/auth/logout`은 미구현.
+
+**절차:** 결정 질문(Q1–Q8) 선행 → [`artifact/prd/auth-logout.md`](../../artifact/prd/auth-logout.md) 확정 → PRD 평가 → §14 보완 메모.
+
+**확정 결정 요약:**
+
+| ID | 결정 |
+|----|------|
+| Q1 | SSR + `POST /api/v1/auth/logout` |
+| Q2 | 현재 브라우저 세션만 |
+| Q3 | POST + CSRF |
+| Q4 | 즉시 로그아웃(확인 모달 없음) |
+| Q5 | 공개 Referer면 복귀, else `/` |
+| Q6 | v1 진입: 드로어 푸터만 |
+| Q7 | `IdentityAuditLog` `LOGOUT` 필수 |
+| Q8 | v1 세션만; OAuth revoke는 design 검토만 |
+
+**PRD §14 design 필수 메모 (D-MEMO):** Referer UX·CSRF 전역 disable 정합·reconsent v1 회귀 유지·allowlist 동기화·identity 주체. **implement 전 D-MEMO-1·2·4 Closed.**
+
+**보드:** `artifact/ops/tasks/board.md` — `prd` 페이즈 done, `design` planned.
+
+### 2.6 개발 운영
+
+_(해당 없음 — §2.5 문서 작업)_
 
 ## 3. 문제와 해결
 
@@ -123,17 +169,62 @@ _(해당 없음)_
 
 ## 5. 다음 액션
 
-### Planet645
+SoT: [`artifact/ops/tasks/board.md`](../../artifact/ops/tasks/board.md) (Active 없음 · Backlog 8건, `AUTH-LOGOUT-ZERO-01` 포함). 완료 태스크: [`archive-history-index.md`](../../artifact/ops/tasks/archive-history-index.md).
 
-- [ ] 로컬: 마케팅 미동의 → optional-terms 동의 → marketing-channels 채널 ON 스모크
-- [ ] `PHASE17-02-FOLLOWUP-MKT-SEND-CHECK` — 동의+채널 조합 발송 가드 수동 점검
-- [ ] `MYPAGE-DRAWER-01` 잔여(크레딧 상세 페이지 등)
-- [ ] 로컬 prod-profile 회귀(`PHASE17-LOCAL-PROD-REGRESSION-01`)
+### 5.1 오늘 완료·아카이브 (태스크 ID)
+
+| Task ID | 상태 | 비고 |
+|---------|------|------|
+| `TERMS-OPTIONAL-CONSENT-MYPAGE-01` | archived | 선택 약관 사후 동의 · Spring PR #7 |
+| `TERMS-OPTIONAL-CONSENT-WITHDRAW-01` | archived | 동의·철회 단일 화면 · 2026-05-19 |
+| `NOTIF-MKT-SEND-GUARD-01` | archived | 마케팅 발송 가드 · Spring PR #10 |
+| `PHASE17-02-FOLLOWUP-MKT-SEND-CHECK` | archived | dev 훅 시나리오 1–4 수동 verify |
+| `NOTIF-CONSENT-BOUNDARY-01` | archived | 약관·알림 경계 PRD/design/plan |
+
+TNB·드로어 병합 본체는 에픽 `MYPAGE-DRAWER-01`(PRD) 기준이며, 보드에는 **후속** ID로 분리되어 있다.
+
+### 5.2 잔여 업무 — Planet645 (board Backlog)
+
+보드 `executionOrder`는 유지. 아래 **착수 순**은 **선행 태스크 없음**을 전제로, 범위·as-built 재사용·외부 연동·설계 미확정 항목을 기준으로 **처리하기 쉬운 것부터** 정렬했다.
+
+| 착수 순 | Task ID | board Order | 우선순위 | 요약 | 쉬운 이유(요지) |
+|--------|---------|-------------|----------|------|----------------|
+| 0 | [`AUTH-LOGOUT-ZERO-01`](../../artifact/ops/tasks/board.md) | 200 | **high** | 로그아웃 제로베이스 · PRD ✅ → design/plan | PRD·Q1–Q8 확정 · §14 D-MEMO design 선행 |
+| 1 | [`TERMS-MINOR-AGE-DECLINE-01`](../../artifact/ops/tasks/board.md) | 230 | medium | 「만 18세 이하」decline · **verify 대기** | implement·문서 **done** · [수동 verify](../../artifact/ops/verify/TERMS-MINOR-AGE-DECLINE-01-manual-verify.md) |
+| 2 | [`MYPAGE-CREDIT-PAGE-01`](../../artifact/ops/tasks/board.md) | 210 | medium | 드로어 크레딧 → **상세·이력 SSR** | balance/history API·드로어 잔액 **as-built** · 페이지+링크 1곳 집중 |
+| 3 | [`MYPAGE-MYINFO-NAV-01`](../../artifact/ops/tasks/board.md) | 220 | medium | 내 정보 **허브·서브nav** | `mypage-settings-menu` **패턴 복제** 가능 · 대상 화면·라우트 **다수**로 2번보다 넓음 |
+| 4 | [`PROFILE-ADDRESS-SEARCH-01`](../../artifact/ops/tasks/board.md) | 260 | low | 프로필 주소검색 API 연동 | 공급자·CSP·키·마이그레이션 **선택지** design 선행 |
+| 5 | [`PHASE22-BILLING-SANDBOX-01`](../../artifact/ops/tasks/board.md) | 240 | medium | Toss Payments Sandbox | 실키·웹훅·서명·프로파일 분기 · PG 연동 |
+| 6 | [`PHASE22-BILLING-REFUND-01`](../../artifact/ops/tasks/board.md) | 250 | low | 환불·영수증 API·UI | MVP **비범위** 후속 · API·웹훅·UI 면적 큼 |
+| 7 | [`IDENTITY-CI-FREE-ABUSE-01`](../../artifact/ops/tasks/board.md) | 270 | low | CI 앵커·무료 혜택 1인 1회 | PASS/NICE·법무·Entitlement 교차 · 범위 최대 |
+
+**착수 큐 (선행 무시):**  
+`AUTH-LOGOUT-ZERO-01`(design) → `TERMS-MINOR-AGE-DECLINE-01` → `MYPAGE-CREDIT-PAGE-01` → `MYPAGE-MYINFO-NAV-01` → `PROFILE-ADDRESS-SEARCH-01` → `PHASE22-BILLING-SANDBOX-01` → `PHASE22-BILLING-REFUND-01` → `IDENTITY-CI-FREE-ABUSE-01`
+
+> 보드 Agent notes의 선행(예: MYINFO↔CREDIT, Sandbox 키)은 **착수 순 결정에 반영하지 않음**. 실제 착수 시 키·라우트 확정이 막히면 해당 항목만 건너뛰고 다음 순번으로 진행.
+
+### 5.3 잔여 업무 — verify·문서 (보드 외)
+
+Backlog보다 **먼저** 끝내기 쉬운 항목(코드 변경 없음·짧은 회귀). §5.2 착수 **이전** 또는 병렬로 처리.
+
+| 착수 순 | 항목 | 연관 Task ID | 메모 |
+|--------|------|----------------|------|
+| 0a | [ ] PRD delta: `terms-consent.md` §4.5·§6.1 | `TERMS-OPTIONAL-CONSENT-MYPAGE-01` | 문서만 · 아카이브 design 잔여 |
+| 0b | [ ] 로컬 스모크: optional-terms → marketing-channels ON | `TERMS-OPTIONAL-CONSENT-MYPAGE-01` | 구현 완료 · 수동 1회 |
+| 0c | [ ] 로컬 **prod-profile** 회귀 | `PHASE17-LOCAL-PROD-REGRESSION-01` | plan/CLAUDE SoT · board 미등재 |
+| 0d | [ ] `TERMS-MINOR-AGE-DECLINE-01` 수동 verify | 동일 | [`TERMS-MINOR-AGE-DECLINE-01-manual-verify.md`](../../artifact/ops/verify/TERMS-MINOR-AGE-DECLINE-01-manual-verify.md) §3.2–3.4 |
+
+### Planet645 (추가)
+
+- [ ] `AUTH-LOGOUT-ZERO-01` — `artifact/design/user-identity/auth-logout-flow.md` (§14 D-MEMO-1~5 반영)
+- [ ] `artifact/plan/auth-logout-implementation.md`
 
 ### 개발 운영
 
-- [x] `artifact/ops/tasks/board.md` — `TERMS-OPTIONAL-CONSENT-MYPAGE-01` → `review_pending`
-- [ ] PRD `terms-consent.md` §4.5 가입 후 동의 경로 문서 delta
+- [x] `artifact/ops/tasks/board.md` — `TERMS-OPTIONAL-CONSENT-MYPAGE-01` 등 당일 완료 태스크 아카이브 이관
+- [x] `artifact/prd/auth-logout.md` — PRD 확정 + §14 평가 보완 메모
+- [ ] PRD `terms-consent.md` §4.5 delta (§5.3 표 참조)
+- [ ] `main` 원격 push(필요 시) — §1 개발 운영
 
 ## 6. 기준
 
