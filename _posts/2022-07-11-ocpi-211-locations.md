@@ -1,11 +1,8 @@
 ---
 title: "OCPI 2.1.1 implementation as eMSP"
-
 date: 2022-07-11 09:55:28 -0400
-
 categories: work
-
-tags: ocpi security encryption
+tags: ocpi ev
 
 
 # 목차
