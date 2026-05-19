@@ -49,7 +49,7 @@ last_modified_at: 2026-05-20 12:00:00 +0900
 
 - [x] 보드 Active에서 태스크 아카이브 · [2026-05-18 일지](/2026-05-18-developer-log) 다음 액션 정합
 - [x] 워크스페이스 PR [#16](https://github.com/JungMockdan/com.mockdan.life-saver-lotto-workspace/pull/16) merge
-- [ ] GitHub Pages push (05-18·05-19 일지)
+- [x] GitHub Pages push (05-18·05-19 일지) — `gh-pages`←`main` · Actions `pages.yml`
 
 ---
 
@@ -155,7 +155,7 @@ _(해당 없음)_
 | 0b | `TERMS-OPTIONAL-CONSENT-MYPAGE-01` · `TERMS-OPTIONAL-CONSENT-WITHDRAW-01` _(archived)_ | [x] optional-terms → marketing-channels UI 스모크 | [`TERMS-OPTIONAL-CONSENT-01-manual-verify.md`](../../artifact/ops/verify/TERMS-OPTIONAL-CONSENT-01-manual-verify.md) §6 **0b PASS** |
 | — | _(보드 없음)_ | [ ] Google OAuth 재로그인 — 대시보드 프로필·통계 | carry · `PHASE17-LOCAL-PROD-REGRESSION-01` **Step 5**(수동 OAuth UI)와 병행 가능 |
 | — | _(보드 없음)_ | [ ] 스키마 rename PR (Spring + ML) | `lotto_*` rename·Flyway 축 · `PHASE17-PROD-VALIDATE-SCHEMA-DRIFT-01`(`105`)과 **별도** |
-| — | _(운영·보드 없음)_ | [ ] GitHub Pages push (05-18·05-19 일지) | §1 개발 운영 목표와 동일 |
+| — | _(운영·보드 없음)_ | [x] GitHub Pages push (05-18·05-19 일지) | `.github/workflows/pages.yml` · legacy 빌드 `errored` → Actions 배포 |
 | — | _(운영·보드 없음)_ | [ ] `main` 원격 push(필요 시) | [05-18 §1](/2026-05-18-developer-log#1-오늘-목표) 잔여 |
 
 ### 5.2 완료 (당일·이관)
@@ -167,6 +167,7 @@ _(해당 없음)_
 | 개발 운영 | [05-18 일지](/2026-05-18-developer-log) 완료 항목 `[x]` 정합 |
 | 개발 운영 | 약관 PRD·설계 역정합 — `artifact/prd/terms-consent.md` §1·§4.5·§6.1·§8#6, `artifact/design/terms-consent/01-schema-revision-guards.md` §5.4·§10.1#7 (0a 결정 반영) |
 | 개발 운영 | 수동 verify **0b** Pass · `artifact/ops/verify/` runbook/record 패턴 · `/verify-scaffold` · `/verify-next` |
+| 개발 운영 | GitHub Pages — `gh-pages`에 `main` merge · Actions `pages.yml` (legacy Jekyll 빌드 실패 대체) |
 | 아카이브(이전) | `PHASE17-02-FOLLOWUP-MKT-SEND-CHECK`, `NOTIF-MKT-SEND-GUARD-01` 등 — [05-18 §5.1](/2026-05-18-developer-log#51-오늘-완료아카이브-태스크-id) |
 
 ---
