@@ -17,6 +17,7 @@ last_modified_at: 2026-05-20 10:00:00 +0900
   - [Planet645](#planet645)
   - [개발 운영](#개발-운영)
 - [2. 주요 변경 사항](#2-주요-변경-사항)
+  - [2.1 `TERMS-MINOR-AGE-DECLINE-01` 수동 verify](#21-terms-minor-age-decline-01-수동-verify)
   - [Planet645](#planet645-1)
   - [개발 운영](#개발-운영-1)
 - [3. 문제와 해결](#3-문제와-해결)
@@ -95,7 +96,6 @@ _(해당 없음)_
 
 | Task ID | 항목 |
 |---------|------|
-| `PHASE17-LOCAL-PROD-REGRESSION-01` | Step 5 prod — M1-4·M4 재검증 |
 | `AUTH-LOGOUT-ZERO-01` | design → plan → implement |
 | `MYPAGE-CREDIT-PAGE-01` | design (백로그 `200`) |
 | `MYPAGE-MYINFO-NAV-01` | design — [05-19 결정 메모](/2026-05-19-developer-log#25-mypage-myinfo-nav-01-착수-전-결정-메모-planet645--문서만) 참고 |
@@ -104,6 +104,7 @@ _(해당 없음)_
 
 | Task ID | 항목 |
 |---------|------|
+| `PHASE17-LOCAL-PROD-REGRESSION-01` | Step 5 prod — M1-4·M4 재검증 |
 | `TERMS-MINOR-AGE-DECLINE-01` | 수동 verify Pass · 보드 아카이브 |
 
 ---
