@@ -1,70 +1,59 @@
 ---
-title: "개발일지 — 2026-05-20 (PHASE17 Step 5 재검증·약관 verify)"
-excerpt: "온보딩·선택 약관 수정 반영 후 prod Step 5 재검증, 미성년 decline 수동 verify, 로그아웃 design 착수."
+title: "개발일지 — 2026-05-20 (로그아웃 제로베이스)"
+excerpt: "AUTH-LOGOUT-ZERO-01 — POST+CSRF·API logout·LOGOUT 감사·Referer redirect. 보드 아카이브·SECURITY-GLOBAL-CSRF-01 선행 해제."
 categories: [deVlog]
-tags: [planet645, spring, terms, oauth, prod-profile, verify, 개발일지]
+tags: [planet645, spring, identity, security, logout, 개발일지]
 toc: true
 toc_sticky: true
-date: 2026-05-20 10:00:00 +0900
-last_modified_at: 2026-05-20 10:00:00 +0900
+date: 2026-05-20 16:00:00 +0900
+last_modified_at: 2026-05-20 16:00:00 +0900
 ---
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
-<!-- code_chunk_output -->
-
-- [1. 오늘 목표](#1-오늘-목표)
-  - [Planet645](#planet645)
-  - [개발 운영](#개발-운영)
-- [2. 주요 변경 사항](#2-주요-변경-사항)
-  - [Planet645](#planet645-1)
-  - [개발 운영](#개발-운영-1)
-- [3. 문제와 해결](#3-문제와-해결)
-  - [Planet645](#planet645-2)
-  - [개발 운영](#개발-운영-2)
-- [4. 배운 점](#4-배운-점)
-- [5. 다음 액션](#5-다음-액션)
-  - [5.1 미완](#51-미완)
-  - [5.2 완료 (당일 — 상세는 §2)](#52-완료-당일--상세는-2)
-- [6. 기준](#6-기준)
-
-<!-- /code_chunk_output -->
-
-
-> **하루 요약:** `TERMS-MINOR-AGE-DECLINE-01` 수동 verify 완료·보드 아카이브. D6(가입 전 decline) 경로에서 social·감사 없음이 as-built와 일치함을 확인.
+> **하루 요약:** 로그아웃을 PRD·design·plan·Spring 구현까지 한 사이클로 맞춤 — 드로어 POST+CSRF, `POST /api/v1/auth/logout`, 현재 세션만 무효화, `IdentityAuditLog.LOGOUT`, 공개 Referer 복귀.
 
 ## 1. 오늘 목표
 
 ### Planet645
 
-- [ ] `PHASE17-LOCAL-PROD-REGRESSION-01` — Step 5 **prod** `:8080` 수동 OAuth UI 재검증 (M1-4 온보딩 스킵·M4 알림/약관 가드 — [05-19 §2.13–2.14](/2026-05-19-developer-log#214-온보딩-스킵--선택-약관-화면-planet645) 수정 반영 후)
-- [x] `TERMS-MINOR-AGE-DECLINE-01` — 수동 verify **done** ([`TERMS-MINOR-AGE-DECLINE-01-manual-verify.md`](../../artifact/ops/verify/TERMS-MINOR-AGE-DECLINE-01-manual-verify.md))
-- [ ] `AUTH-LOGOUT-ZERO-01` — `artifact/design/user-identity/auth-logout-flow.md` 초안 (PRD ✅)
+- [x] `AUTH-LOGOUT-ZERO-01` — design · plan · implement · 단위·MockMvc 검증
 
 ### 개발 운영
 
-- [ ] 보드 `PHASE17-LOCAL-PROD-REGRESSION-01` Step 5·verify SoT와 일지 §2 동기화
-- [ ] (선택) 약관 PRD 0a 결정(05-19→20) — design/plan 반영 여부 점검
+- [x] 보드 Active 정리 · 아카이브 · `SECURITY-GLOBAL-CSRF-01` blockedBy 해제
 
 ---
 
 ## 2. 주요 변경 사항
 
-### 2.1 `TERMS-MINOR-AGE-DECLINE-01` 수동 verify
+### 2.1 `AUTH-LOGOUT-ZERO-01` — 로그아웃 제로베이스 (Planet645)
 
-- SoT: [`artifact/ops/verify/TERMS-MINOR-AGE-DECLINE-01-manual-verify.md`](../../artifact/ops/verify/TERMS-MINOR-AGE-DECLINE-01-manual-verify.md) — **verify done**
-- **D6 경로:** OAuth 직후·프로필 제출 전 decline → `social_accounts`·`identity_audit_log` 없음 = as-built (D4/D5 skip)
-- **N2:** `JSESSIONID`만 삭제 시 `/login`(쿼리 없음) — N3와 동일. 재현은 dev-login → `/profile/setup` → decline → `login?error=no_pending_profile`
-- OAuth 반복용 초기화: [`TERMS-MINOR-AGE-DECLINE-01-reset-oauth-test-account.sql`](../../artifact/ops/verify/TERMS-MINOR-AGE-DECLINE-01-reset-oauth-test-account.sql)
-- 보드: `TERMS-MINOR-AGE-DECLINE-01` → [`archive-history-2026-05-24.md`](../../artifact/ops/tasks/archive/archive-history-2026-05-24.md)
+as-built는 GET `/logout` 링크·고정 `logoutSuccessUrl("/")`·감사 없음·API 미구현이었다. PRD Q1–Q8(2026-05-18)과 design(OD-1·OD-2 확정)에 맞춰 v1을 구현했다.
 
-### Planet645
+| 영역 | v1 동작 |
+|------|---------|
+| **SSR** | 드로어·`reconsent` — `POST /logout` + CSRF hidden |
+| **CSRF** | `requireCsrfProtectionMatcher` — **POST `/logout` only** (전역 CSRF 아님) |
+| **세션** | 현재 브라우저 1건 무효화 (`09-security-privacy` 「전 세션」과 의도적 delta) |
+| **리다이렉트** | same-origin Referer path가 공개 allowlist면 복귀, else `/` |
+| **API** | `POST /api/v1/auth/logout` → 204 (CSRF 면제) |
+| **감사** | `IdentityAuditLog` `LOGOUT` — 저장 실패해도 로그아웃 성공 |
 
-_(당일 verify만 — 코드 변경 없음)_
+**코드 SoT:** `LogoutService`, `IdentityLogoutHandler`, `PostLogoutRedirectService`, `AuthLogoutController`, `SecurityConfig`, `fragments/tnb.html`, `terms/reconsent.html`.
 
-### 개발 운영
+**검증:** `AuthLogoutSecurityTest`, `LogoutServiceTest`, `PostLogoutRedirectServiceTest` · `./gradlew test` green.
 
-- verify §6 최종 Pass · 보드·아카이브 인덱스 갱신
+**문서:** `artifact/design/user-identity/auth-logout-flow.md`, `artifact/plan/auth-logout-implementation.md`.
+
+### 2.2 보드 · 백로그 현행화 (개발 운영)
+
+| 항목 | 내용 |
+|------|------|
+| 아카이브 | `AUTH-LOGOUT-ZERO-01` → `archive/archive-history-2026-05-24.md`, index 39건 |
+| Active | _(없음)_ |
+| 다음 밴드 | `SECURITY-GLOBAL-CSRF-01` (`116`) — SSR POST 전역 CSRF 확장, 선행 태스크 완료로 `blockedBy` 해제 |
+| `backlogRunOrder` | `116` → `200` → … |
 
 ---
 
@@ -72,39 +61,41 @@ _(당일 verify만 — 코드 변경 없음)_
 
 ### Planet645
 
-_(해당 없음)_
+| 문제 | 원인 | 해결 |
+|------|------|------|
+| GET `/logout` 북마크 | logout matcher POST only | GET은 logout 필터 미적용(404) — design에 명시 |
 
 ### 개발 운영
 
-- **N2 vs N3:** 세션 쿠키만 제거하면 Security가 먼저 `/login`으로 보냄 — decline API의 `no_pending_profile`과는 다른 진입
-- **OAuth 초기화 SQL:** §2 hard-delete 시 `testuser-e2e-user`에 묶인 Google social까지 삭제되면 dev-login 시드 identity 깨짐 → bootRun 재기동 또는 §3 시드 이메일 분리 사용
+_(해당 없음)_
 
 ---
 
 ## 4. 배운 점
 
-- as-built에서 **social 계정 생성**은 OAuth 콜백 직후가 아니라 `linkSocialAccount`(프로필 제출 또는 EXACT_MATCH) 시점이다 — decline verify는 이 전제를 전제로 D4/D5를 skip한다.
+- 로그아웃 CSRF는 **matcher로 한 엔드포인트만** 켜도 PRD Q3-A를 만족한다 — 마이페이지 POST 일괄 CSRF는 `SECURITY-GLOBAL-CSRF-01`로 분리하는 편이 안전하다.
+- Referer-only redirect는 Safari 등 Referer 누락 시 `/` 폴백이 기본 UX다.
 
 ---
 
 ## 5. 다음 액션
 
-> 잔여 출처: [05-19 §5](/2026-05-19-developer-log#5-다음-액션) · 보드 [`artifact/ops/tasks/board.md`](../../artifact/ops/tasks/board.md).
+> 보드 SoT: `artifact/ops/tasks/board.md`.
 
 ### 5.1 미완
 
 | Task ID | 항목 |
 |---------|------|
-| `PHASE17-LOCAL-PROD-REGRESSION-01` | Step 5 prod — M1-4·M4 재검증 |
-| `AUTH-LOGOUT-ZERO-01` | design → plan → implement |
-| `MYPAGE-CREDIT-PAGE-01` | design (백로그 `200`) |
-| `MYPAGE-MYINFO-NAV-01` | design — [05-19 결정 메모](/2026-05-19-developer-log#25-mypage-myinfo-nav-01-착수-전-결정-메모-planet645--문서만) 참고 |
+| `SECURITY-GLOBAL-CSRF-01` | SSR POST 전역 CSRF — design → implement → governance |
+| `MYPAGE-CREDIT-PAGE-01` | 크레딧 전용 페이지 (200) |
+| `MYPAGE-MYINFO-NAV-01` | 내 정보 허브·서브nav (210) |
 
 ### 5.2 완료 (당일 — 상세는 §2)
 
-| Task ID | 항목 |
-|---------|------|
-| `TERMS-MINOR-AGE-DECLINE-01` | 수동 verify Pass · 보드 아카이브 |
+| §2 | 항목 |
+|----|------|
+| 2.1 | `AUTH-LOGOUT-ZERO-01` |
+| 2.2 | 보드 아카이브 · CSRF 후속 태스크 정리 |
 
 ---
 
@@ -113,6 +104,5 @@ _(해당 없음)_
 | 항목 | 값 |
 |------|-----|
 | Spring | `com.mockdan.life-saver-lotto/` |
-| 회귀 | **로컬 prod-profile** (스테이징 없음) |
-| 보드 SoT | `artifact/ops/tasks/board.md` — Active `(none)`, Backlog `115`→`250` |
-| 선행 (05-19) | validate drift 완료 · Step 3–4·6 green · Step 5 prod M1-4·M4 결함 → 온보딩·optional-terms sync 수정 |
+| PRD·design | `artifact/prd/auth-logout.md`, `artifact/design/user-identity/auth-logout-flow.md` |
+| 보드 | Active 없음 · 다음 `116` `SECURITY-GLOBAL-CSRF-01` |
