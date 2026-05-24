@@ -1,12 +1,12 @@
 ---
 title: "개발일지 — 2026-05-24 (Billing dormant · PG 보류)"
-excerpt: "PG 입점 보류 — Mock 결제·구독 UI dormant(BILLING-DORMANT-01). 플래그·V3 FREE 리셋·431 tests green. Sandbox/Refund 보드 cancelled, 다음 SECURITY-COOKIE-SESSION-01."
+excerpt: "PG 입점 보류 — Billing dormant(BILLING-DORMANT-01). 플래그·V3·431 tests. SoT 4건 dormant 한 줄. Sandbox cancelled, 다음 SECURITY-COOKIE-SESSION-01."
 categories: [deVlog]
 tags: [planet645, billing, subscription, spring, verify, 개발일지]
 toc: true
 toc_sticky: true
 date: 2026-05-24 09:00:00 +0900
-last_modified_at: 2026-05-24 18:00:00 +0900
+last_modified_at: 2026-05-24 22:00:00 +0900
 ---
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
@@ -25,6 +25,7 @@ last_modified_at: 2026-05-24 18:00:00 +0900
 ### 개발 운영
 
 - [x] `board.md` · `roadmap-current.md` — Phase 2.2 **deferred**, Sandbox/Refund cancelled
+- [x] 구독/결제 **SoT 5건** dormant 한 줄 (design · integration · PRD · as-built · cookie-session)
 - [x] 코드 리뷰 — RecommendControllerTest assertion·billing disabled 테스트 보강
 
 ---
@@ -65,6 +66,18 @@ last_modified_at: 2026-05-24 18:00:00 +0900
 | Active 다음 | `SECURITY-COOKIE-SESSION-01` (235) |
 
 SoT: `artifact/ops/tasks/board.md`, `artifact/plan/roadmap-current.md`.
+
+### 2.3 구독/결제 SoT dormant 한 줄 (개발 운영)
+
+에이전트·후속 개발이 Sandbox FOLLOWUP을 **다음 단계**로 오해하지 않도록 Phase 2.2 SoT·as-built에 **2026-05-24** 한 줄 추가.
+
+| 문서 | 반영 |
+|------|------|
+| `phase22-billing-mvp-design-delta.md` | 메타 표 `As-built (2026-05-24)` 행 |
+| `billing-integration-spec.md` | 상단 blockquote |
+| `phase22-billing-mvp-prd-delta.md` | 비목표 Sandbox → **deferred/cancelled** |
+| `as-built/billing-entitlement.md` | summary·pointers 갱신 |
+| `cookie-session-design-delta.md` | 선행 조건 문구 (Billing dormant 후 착수) |
 
 ---
 
@@ -114,6 +127,7 @@ _(해당 없음)_
 |----|------|
 | 2.1 | BILLING-DORMANT-01 — 플래그·UI·V3·테스트 |
 | 2.2 | 보드 cancelled · roadmap deferred |
+| 2.3 | 구독/결제 SoT dormant 한 줄 |
 
 ---
 
