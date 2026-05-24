@@ -1,6 +1,6 @@
 ---
 title: "개발일지 — 2026-05-24 (Billing dormant · PG 보류)"
-excerpt: "PG 입점 보류 — Billing dormant(BILLING-DORMANT-01). 플래그·V3·431 tests. SoT 4건 dormant 한 줄. Sandbox cancelled, 다음 SECURITY-COOKIE-SESSION-01."
+excerpt: "PG 입점 보류 — Billing dormant(BILLING-DORMANT-01). 플래그·V3·431 tests. SoT 5건 dormant 한 줄. Sandbox cancelled, 다음 SECURITY-COOKIE-SESSION-01."
 categories: [deVlog]
 tags: [planet645, billing, subscription, spring, verify, 개발일지]
 toc: true
