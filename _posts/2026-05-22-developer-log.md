@@ -113,7 +113,7 @@ _(해당 없음)_
 
 - [ ] 사업자등록(722000·724000) · 통신판매업 신고
 - [ ] 도메인·호스팅 방향 결정
-- [ ] `PHASE22-BILLING-SANDBOX-01` — PG OK 후
+- [ ] ~~`PHASE22-BILLING-SANDBOX-01`~~ — **cancelled 2026-05-24** ([2026-05-24-developer-log.md](2026-05-24-developer-log.md) §2.2)
 
 ### 5.2 완료 (당일 — 상세 §2)
 
