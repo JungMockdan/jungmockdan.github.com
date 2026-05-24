@@ -1,8 +1,8 @@
 ---
-title: "개발일지 — 2026-05-24 (Billing dormant · PG 보류)"
-excerpt: "PG 입점 보류 — Billing dormant(BILLING-DORMANT-01). 플래그·V3·431 tests. SoT 5건 dormant 한 줄. Sandbox cancelled, 다음 SECURITY-COOKIE-SESSION-01."
+title: "개발일지 — 2026-05-24 (Billing dormant · HTTP 보안 헤더)"
+excerpt: "PG dormant(BILLING-DORMANT-01) 마무리. prod HTTP 헤더(SECURITY-HTTP-HEADERS-01) — Report-Only CSP·nosniff·frame DENY·Swagger off · verify PASS."
 categories: [deVlog]
-tags: [planet645, billing, subscription, spring, verify, 개발일지]
+tags: [planet645, billing, security, spring, verify, 개발일지]
 toc: true
 toc_sticky: true
 date: 2026-05-24 09:00:00 +0900
@@ -11,22 +11,20 @@ last_modified_at: 2026-05-24 22:00:00 +0900
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
-> **하루 요약:** PG 입점 승인 불확실로 **실 PG·구독 노출 중단**, Mock completion·스키마는 **dormant 보존**. `app.billing.enabled` / `checkout-ui.enabled` 이중 플래그, Flyway V3 전원 FREE, 크레딧 부족 UX 중립화. 보드 Sandbox·Refund **cancelled** — 다음 밴드 **235** 세션 쿠키.
+> **하루 요약:** PG 입점 보류로 Billing **dormant** 마무리. 이어 prod-profile **HTTP 보안 헤더** — CSP Report-Only(차단 없음)·nosniff·frame DENY·Referrer-Policy·springdoc off. MockMvc + 로컬 prod-profile curl verify **PASS** · 보드 아카이브.
 
 ## 1. 오늘 목표
 
 ### Planet645
 
 - [x] Billing·구독 **Mock 수준 마무리** — prod 결제·mock checkout 차단
-- [x] 구독 UI 숨김 + local 설정으로만 재노출
-- [x] FREE 크레딧 정책(A) 유지 · 전원 FREE DB 리셋(V3)
-- [x] `./gradlew test` green (431 passed)
+- [x] prod HTTP 보안 헤더 baseline (`SECURITY-HTTP-HEADERS-01`)
+- [x] `./gradlew test` green
 
 ### 개발 운영
 
 - [x] `board.md` · `roadmap-current.md` — Phase 2.2 **deferred**, Sandbox/Refund cancelled
-- [x] 구독/결제 **SoT 5건** dormant 한 줄 (design · integration · PRD · as-built · cookie-session)
-- [x] 코드 리뷰 — RecommendControllerTest assertion·billing disabled 테스트 보강
+- [x] HTTP 헤더 design delta · verify runbook · run record · 보드 아카이브
 
 ---
 
@@ -45,50 +43,46 @@ last_modified_at: 2026-05-24 22:00:00 +0900
 |------|----------------|
 | `BillingGate` | `requireEnabled()` → 503 ProblemDetail |
 | `SubscribeController` | `@ConditionalOnProperty(checkout-ui)` — off 시 라우트 미등록 |
-| `GET /api/v1/subscriptions/me` | billing off → **FREE** |
-| `POST /api/v1/billing/**` | **503** |
-| `TossWebhookController` | billing off → **503** |
-| `CreditBatchServiceImpl` | 월간 구독 reload skip · **free 만료 배치 유지** |
-| Flyway **V3** | `user_subscriptions` 전원 FREE · SUBSCRIPTION `credit_entitlement` 0화 · `payment` 보존 |
+| Flyway **V3** | `user_subscriptions` 전원 FREE · SUBSCRIPTION `credit_entitlement` 0화 |
 
-**UI:** 구독 탭 제거(3탭) · 크레딧 부족 → `/mypage/credits` · 알림 copy 「크레딧·서비스 안내」.
+**검증:** `BillingDormantIntegrationTest` + billing 단위·통합 보강.
 
-**local mock 재개:** `application-local.properties` 주석 — 두 플래그 **함께** `true`.
+### 2.2 SECURITY-HTTP-HEADERS-01 — prod HTTP 보안 헤더 (Planet645)
 
-**검증:** `BillingDormantIntegrationTest` + billing 단위·통합 보강 · **431 tests passed**.
+**제품 결정:** v1은 **enforce CSP 없음** · **CSP Report-Only**로 위반만 관찰 · **HSTS 후속** · **local 변경 없음** · **Swagger prod off**.
 
-### 2.2 보드·로드맵 정리 (개발 운영)
+| 항목 | prod 동작 |
+|------|-----------|
+| `X-Content-Type-Options` | `nosniff` |
+| `X-Frame-Options` | `DENY` |
+| `Referrer-Policy` | `strict-origin-when-cross-origin` |
+| `Content-Security-Policy-Report-Only` | aspirational 정책 (인라인·CDN 위반 DevTools 관찰) |
+| springdoc | `api-docs` / `swagger-ui` **disabled** |
+
+**구현:** `app.security.http-headers.enabled=true` (`application-prod.properties`) → `ProdHttpSecurityHeaders` + `SecurityConfig`. MockMvc `HttpSecurityHeadersLocalTest` / `HttpSecurityHeadersProdTest` (T-HDR-0~3).
+
+**후속:** design delta §9 F-HDR-1~10 (CSP enforce·nonce·HSTS·ML/LLM 헤더 등).
+
+### 2.3 보드·로드맵 · SoT 정리 (개발 운영)
 
 | 항목 | 변경 |
 |------|------|
-| `PHASE22-BILLING-SANDBOX-01` · `PHASE22-BILLING-REFUND-01` | **cancelled** — PG 재개 시 FOLLOWUP |
-| `roadmap-current.md` Phase 2.2 | **deferred** (PG 입점 후) |
-| Active 다음 | `SECURITY-COOKIE-SESSION-01` (235) |
+| `PHASE22-BILLING-SANDBOX-01` · `REFUND-01` | **cancelled** |
+| `SECURITY-HTTP-HEADERS-01` | design → implement → verify **PASS** → **archived** |
+| `SECURITY-COOKIE-SESSION-01` | verify PASS (당일 아카이브) |
 
-SoT: `artifact/ops/tasks/board.md`, `artifact/plan/roadmap-current.md`.
-
-### 2.3 구독/결제 SoT dormant 한 줄 (개발 운영)
-
-에이전트·후속 개발이 Sandbox FOLLOWUP을 **다음 단계**로 오해하지 않도록 Phase 2.2 SoT·as-built에 **2026-05-24** 한 줄 추가.
-
-| 문서 | 반영 |
-|------|------|
-| `phase22-billing-mvp-design-delta.md` | 메타 표 `As-built (2026-05-24)` 행 |
-| `billing-integration-spec.md` | 상단 blockquote |
-| `phase22-billing-mvp-prd-delta.md` | 비목표 Sandbox → **deferred/cancelled** |
-| `as-built/billing-entitlement.md` | summary·pointers 갱신 |
-| `cookie-session-design-delta.md` | 선행 조건 문구 (Billing dormant 후 착수) |
+SoT: [`http-headers-design-delta.md`](https://github.com/jungmockdan/com.mockdan.life-saver-lotto-workspace/blob/main/artifact/design/security/http-headers-design-delta.md), [`SECURITY-HTTP-HEADERS-01-runbook.md`](https://github.com/jungmockdan/com.mockdan.life-saver-lotto-workspace/blob/main/artifact/ops/verify/SECURITY-HTTP-HEADERS-01-runbook.md).
 
 ---
 
 ## 3. 문제와 해결
 
-### Planet645
+### 3.1 Planet645
 
 | 문제 | 원인 | 해결 |
 |------|------|------|
-| 전체 test 1 fail | 크레딧 부족 메시지 변경 후 assertion 미갱신 | `RecommendControllerTest` 기대값 갱신 |
-| prod mock PRO 우회 | Mock adapter가 checkout 시 completion | `BillingGate` 다층 차단 |
+| MockMvc prod 헤더 미적용 | `@Nested` + profile 조건 타이밍 | `app.security.http-headers.enabled` property + top-level test class 분리 |
+| CSP/Referrer `HttpSecurity.headers()` 미반영 | Spring Security writer 조합 | `HeaderWriterFilter` 앞 커스텀 필터로 Report-Only·Referrer 주입 |
 
 ### 개발 운영
 
@@ -98,8 +92,8 @@ _(해당 없음)_
 
 ## 4. 배운 점
 
-- PG 심사와 **코드 완성도**는 분리 가능 — **dormant + 플래그**로 베타(무료)와 유료 재개 경로를 동시에 유지.
-- UI·결제 플래그 **분리**로 local에서만 mock UX 재현 가능.
+- PG 심사와 **코드 완성도**는 분리 — **dormant + 플래그**로 무료 베타와 유료 재개 경로 동시 유지.
+- CSP는 **Report-Only → 정리 → enforce** 단계가 Thymeleaf SSR에 현실적.
 
 ---
 
@@ -111,23 +105,21 @@ _(해당 없음)_
 
 #### Planet645
 
-- [ ] `SECURITY-COOKIE-SESSION-01` — design → implement (Billing 다음 235)
+- [ ] `SECURITY-OAUTH2-HARDENING-01` — redirect·state/nonce (보드 236)
 - [ ] 토스페이먼츠 가맹 **사전 문의**(carry — [2026-05-22](2026-05-22-developer-log.md) §5.1)
-- [ ] Payletter 또는 PortOne **동일 문의**(Plan B)
 
 #### 개발 운영
 
-- [ ] 사업자등록(722000·724000) · 통신판매업 신고
-- [ ] 도메인·호스팅 방향 결정
-- [ ] `/verify-next` — `SECURITY-COOKIE-SESSION-01` (앱 기동 후)
+- [ ] 사업자등록 · 통신판매업 신고
+- [ ] (선택) prod OAuth 로그인 후 onboarding/recommend **브라우저** CSP Report-Only 위반 spot (S07)
 
 ### 5.2 완료 (당일 — 상세 §2)
 
 | §2 | 항목 |
 |----|------|
-| 2.1 | BILLING-DORMANT-01 — 플래그·UI·V3·테스트 |
-| 2.2 | 보드 cancelled · roadmap deferred |
-| 2.3 | 구독/결제 SoT dormant 한 줄 |
+| 2.1 | BILLING-DORMANT-01 |
+| 2.2 | SECURITY-HTTP-HEADERS-01 — implement + verify PASS |
+| 2.3 | 보드·SoT · HTTP 헤더 아카이브 |
 
 ---
 
@@ -135,7 +127,7 @@ _(해당 없음)_
 
 | 항목 | 값 |
 |------|-----|
-| Billing dormant | `com.mockdan.life-saver-lotto` — `BillingGate`, V3 migration |
-| 보드 | `artifact/ops/tasks/board.md` — 다음 235 |
-| 환경 표기 | **로컬 prod-profile 회귀** |
+| HTTP 헤더 | `com.mockdan.life-saver-lotto` — `ProdHttpSecurityHeaders`, `application-prod.properties` |
+| Verify | [`runs/2026-05-24-SECURITY-HTTP-HEADERS-01.md`](https://github.com/jungmockdan/com.mockdan.life-saver-lotto-workspace/blob/main/artifact/ops/verify/runs/2026-05-24-SECURITY-HTTP-HEADERS-01.md) |
+| 환경 표기 | **로컬 prod-profile 회귀** (`localhost:18080`, compose override) |
 | 전일 일지 | [2026-05-22-developer-log.md](2026-05-22-developer-log.md) |
