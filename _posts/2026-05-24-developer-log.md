@@ -1,6 +1,6 @@
 ---
 title: "개발일지 — 2026-05-24 (Billing dormant · HTTP 보안 헤더)"
-excerpt: "PG dormant(BILLING-DORMANT-01) 마무리. prod HTTP 헤더(SECURITY-HTTP-HEADERS-01) — Report-Only CSP·nosniff·frame DENY·Swagger off · verify PASS."
+excerpt: "직접결제 중단·광고 BM — Billing dormant. prod HTTP 헤더 verify PASS."
 categories: [deVlog]
 tags: [planet645, billing, security, spring, verify, 개발일지]
 toc: true
@@ -11,7 +11,7 @@ last_modified_at: 2026-05-24 22:00:00 +0900
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
-> **하루 요약:** PG 입점 보류로 Billing **dormant** 마무리. 이어 prod-profile **HTTP 보안 헤더** — CSP Report-Only(차단 없음)·nosniff·frame DENY·Referrer-Policy·springdoc off. MockMvc + 로컬 prod-profile curl verify **PASS** · 보드 아카이브.
+> **하루 요약:** **BM 전환** — 당분간 **직접결제·PG 없음**, Billing **dormant** · 수익 축은 **광고·미션 REWARD**(후속 에픽). prod-profile **HTTP 보안 헤더** verify **PASS** · 보드 아카이브.
 
 ## 1. 오늘 목표
 
@@ -32,7 +32,7 @@ last_modified_at: 2026-05-24 22:00:00 +0900
 
 ### 2.1 BILLING-DORMANT-01 — 결제·구독 dormant (Planet645)
 
-**제품 결정:** PG 입점 승인 전까지 **실 PG 연동 보류**. Mock PG·completion handler·Flyway 스키마는 **재개용으로 유지**.
+**제품 결정:** **직접결제·PG 입점 중단**(토스 등 사전 문의 **하지 않음**). 당분간 **광고(AdSense)·미션 REWARD**로 BM — Mock PG·Flyway는 **재개용으로만** 코드 보존(`app.billing.*` off).
 
 | 플래그 | 기본 | 역할 |
 |--------|------|------|
@@ -92,7 +92,7 @@ _(해당 없음)_
 
 ## 4. 배운 점
 
-- PG 심사와 **코드 완성도**는 분리 — **dormant + 플래그**로 무료 베타와 유료 재개 경로 동시 유지.
+- **결제 코드**와 **당장의 BM**은 분리 — dormant로 PG 재개 옵션만 남기고, 당분간 운영 초점은 **광고·미션** 쪽.
 - CSP는 **Report-Only → 정리 → enforce** 단계가 Thymeleaf SSR에 현실적.
 
 ---
@@ -105,12 +105,11 @@ _(해당 없음)_
 
 #### Planet645
 
-- [ ] `SECURITY-OAUTH2-HARDENING-01` — redirect·state/nonce (보드 236)
-- [ ] 토스페이먼츠 가맹 **사전 문의**(carry — [2026-05-22](2026-05-22-developer-log.md) §5.1)
+- [ ] Ad·미션·약관(광고·추적) 에픽 — **후속 스프린트**(5/26 verify 등)
 
 #### 개발 운영
 
-- [ ] 사업자등록 · 통신판매업 신고
+- [ ] (선택) 사업자등록 — 광고·서비스 운영; **통신판매업·PG**는 직접결제 재개 시
 - [ ] (선택) prod OAuth 로그인 후 onboarding/recommend **브라우저** CSP Report-Only 위반 spot (S07)
 
 ### 5.2 완료 (당일 — 상세 §2)
