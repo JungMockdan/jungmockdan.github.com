@@ -1,17 +1,17 @@
 ---
-title: "개발일지 — 2026-05-31 (동행복권 정합 · 문자 시드 · flow-up)"
-excerpt: "동행복권 정합·draw645 UX·문자 시드 A verify PASS. 주소 verify PASS · external API inventory SoT."
+title: "개발일지 — 2026-05-31 (동행복권 정합 · CI anchor · flow-up)"
+excerpt: "동행복권 정합·draw645 UX·문자 시드 A·주소 verify PASS. CI anchor·FREE_SIGNUP duplicate gate verify PASS. external API inventory SoT."
 categories: [deVlog]
 tags: [planet645, spring, thymeleaf, ui, dhlottery, recommend, 개발일지]
 toc: true
 toc_sticky: true
 date: 2026-05-31 17:31:58 +0900
-last_modified_at: 2026-05-31 22:39:03 +0900
+last_modified_at: 2026-05-31 22:40:19 +0900
 ---
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
-> **하루 요약:** [동행복권 소개](https://m.dhlottery.co.kr/lt645/intro) 정합 → **랜딩 · 볼색 · `/info/draw645` · UX 후속**. **문자 시드** 범위 A verify PASS · **범위 B** 보드 등록. **주소 verify PASS** · **external API inventory** SoT. **5/17–5/30 flow-up** — Backlog `264`–`271` ([§2.4](#24-개발-운영--후속-flow-up-517530)).
+> **하루 요약:** [동행복권 소개](https://m.dhlottery.co.kr/lt645/intro) 정합 → **랜딩 · 볼색 · `/info/draw645` · UX 후속**. **문자 시드 A** · **주소 verify** · **CI anchor** verify PASS. **external API inventory** SoT. Backlog `264`–`271` ([§2.4](#24-개발-운영--후속-flow-up-517530)).
 
 ## 1. 오늘 목표
 
@@ -22,6 +22,7 @@ last_modified_at: 2026-05-31 22:39:03 +0900
 - [x] 문자 시드 미리보기 범위 A (`FEAT-TEXT-SEED-PREVIEW-A-01`)
 - [x] draw645 UX 후속 (`INFO-DRAW645-UX-01`)
 - [x] 프로필 주소 verify (`PROFILE-ADDRESS-VERIFY-01`)
+- [x] CI anchor · FREE_SIGNUP duplicate gate (`IDENTITY-CI-PASS-01`)
 
 ### 개발 운영
 
@@ -97,6 +98,18 @@ last_modified_at: 2026-05-31 22:39:03 +0900
 | 문서 | [`external-integrations.md`](../../artifact/as-built/external-integrations.md) · `as-built/README` · `06-integrations-and-config` cross-link |
 | 정책 | Tier **A**(지금 OK: 동행복권·Google OAuth·Daum postcode·OpenAI dev) · **B**(PG·NICE·AdSense 등 batch 후) |
 
+### 2.8 CI anchor · FREE_SIGNUP gate (Planet645)
+
+`IDENTITY-CI-PASS-01` — scaffold 후속. CI 원문 미저장 · SHA-256(`CI_ANCHOR_SALT` + CI)만 `user_ci_anchor`.
+
+| 항목 | 내용 |
+|------|------|
+| 플로우 | `/identity/verification/start` · NICE callback scaffold · 로컬 `/dev/ci-verify?ciToken=…` |
+| Entitlement | `grantFreeSignupCredits` — 앵커 필수 · 동일 CI 다른 계정 → duplicate 차단 |
+| 가드 | `scripts/check-ci-anchor-guard.sh` · default `CI_ANCHOR_ENABLED=false` |
+| verify | [`IDENTITY-CI-PASS-01-runbook`](../../artifact/ops/verify/IDENTITY-CI-PASS-01-runbook.md) C01–C06 **PASS** ([run](../../artifact/ops/verify/runs/2026-05-31-IDENTITY-CI-PASS-01.md)) |
+| 잔여 | NICE `EncodeData` decrypt — vendor SDK 후속 |
+
 ---
 
 ## 3. 문제와 해결
@@ -141,7 +154,6 @@ _(해당 없음)_
 #### Planet645
 
 - [ ] `FEAT-TEXT-SEED-PREVIEW-B-01` — 문자 시드 범위 B · 고정/제외 번호 채우기
-- [ ] `IDENTITY-CI-PASS-01` — PASS/NICE · CI E2E
 - [ ] (선택) `RECOMMEND-V1-E2E-01` · `AD-MISSION-BETA-01`
 
 #### 개발 운영
@@ -160,6 +172,7 @@ _(해당 없음)_
 | draw645 UX (`INFO-DRAW645-UX-01`) | [§2.5](#25-draw645-ux-후속-planet645) |
 | 프로필 주소 verify PASS | [§2.6](#26-프로필-주소-verify-planet645) |
 | external API inventory SoT | [§2.7](#27-개발-운영--external-api-inventory-sot) |
+| CI anchor · FREE_SIGNUP gate PASS | [§2.8](#28-ci-anchor--free_signup-gate-planet645) |
 
 ---
 
