@@ -121,7 +121,6 @@ _(해당 없음)_
 
 - [ ] `SECURITY-SECRETS-CI-01` — secrets-guard CI
 - [ ] `SECURITY-DEPENDENCY-CVSS-01` — CVSS fail gate
-- [ ] `FEAT-TEXT-SEED-PREVIEW-A-01` — 보드 아카이브( human review 후)
 
 ### 5.2 완료 (인덱스)
 
@@ -129,7 +128,7 @@ _(해당 없음)_
 |------|-----|
 | 동행복권 정합 점검 | [§2.1](#21-동행복권-정합-점검-planet645) |
 | 랜딩 · 볼색 · `/info/draw645` | [§2.2](#22-정합-보완-구현-planet645) |
-| 문자 시드 미리보기 A · verify PASS | [§2.3](#23-문자-시드-미리보기--범위-a-planet645) |
+| 문자 시드 미리보기 A · verify PASS · 보드 아카이브 | [§2.3](#23-문자-시드-미리보기--범위-a-planet645) |
 | flow-up · Backlog · 추천 v1 unit/verify 아카이브 | [§2.4](#24-개발-운영--후속-flow-up-517530) |
 
 ---
