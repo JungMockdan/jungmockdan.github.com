@@ -1,17 +1,17 @@
 ---
 title: "개발일지 — 2026-05-31 (동행복권 정합 · 문자 시드 · flow-up)"
-excerpt: "동행복권 정합·draw645 UX·문자 시드 범위 A verify PASS. INFO-DRAW645-UX-01 완료·범위 B 보드 등록."
+excerpt: "동행복권 정합·draw645 UX·문자 시드 A verify PASS. 주소 verify PASS · external API inventory SoT."
 categories: [deVlog]
 tags: [planet645, spring, thymeleaf, ui, dhlottery, recommend, 개발일지]
 toc: true
 toc_sticky: true
 date: 2026-05-31 17:31:58 +0900
-last_modified_at: 2026-05-31 22:12:00 +0900
+last_modified_at: 2026-05-31 22:39:03 +0900
 ---
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
-> **하루 요약:** [동행복권 소개](https://m.dhlottery.co.kr/lt645/intro) 정합 → **랜딩 · 볼색 · `/info/draw645` · UX 후속**. **문자 시드**(`text-seed-v1`) 범위 A verify PASS · **범위 B** 보드 등록. **5/17–5/30 flow-up** — Backlog `264`–`271` ([§2.4](#24-개발-운영--후속-flow-up-517530)).
+> **하루 요약:** [동행복권 소개](https://m.dhlottery.co.kr/lt645/intro) 정합 → **랜딩 · 볼색 · `/info/draw645` · UX 후속**. **문자 시드** 범위 A verify PASS · **범위 B** 보드 등록. **주소 verify PASS** · **external API inventory** SoT. **5/17–5/30 flow-up** — Backlog `264`–`271` ([§2.4](#24-개발-운영--후속-flow-up-517530)).
 
 ## 1. 오늘 목표
 
@@ -21,12 +21,14 @@ last_modified_at: 2026-05-31 22:12:00 +0900
 - [x] 랜딩 솔직 엔터테인 톤 · 로또볼 공식 구간 · `/info/draw645`
 - [x] 문자 시드 미리보기 범위 A (`FEAT-TEXT-SEED-PREVIEW-A-01`)
 - [x] draw645 UX 후속 (`INFO-DRAW645-UX-01`)
+- [x] 프로필 주소 verify (`PROFILE-ADDRESS-VERIFY-01`)
 
 ### 개발 운영
 
 - [x] 5/17–5/30 일지 §5 후속 flow-up · 보드 Backlog 재등록
 - [x] 추천 v1 unit · verify runbook PASS → 아카이브
 - [x] 문자 시드 범위 B 보드 등록 (`FEAT-TEXT-SEED-PREVIEW-B-01`)
+- [x] external API inventory SoT (`external-integrations.md`)
 
 ---
 
@@ -78,6 +80,23 @@ last_modified_at: 2026-05-31 22:12:00 +0900
 | **detail** | 미사용 `probability` 「당첨 확률」 카드 제거 |
 | **대시보드** | `LottoDrawDetail.findTopByOrderByLtEpsdDesc` → `prizeLabel` (`{회차}회 1등 {금액}원`) |
 
+### 2.6 프로필 주소 verify (Planet645)
+
+`PROFILE-ADDRESS-VERIFY-01` — Daum 팝업 경로 대신 `/mypage/profile` POST·재조회·DB 수동 verify.
+
+| 항목 | 내용 |
+|------|------|
+| verify | [`PROFILE-ADDRESS-VERIFY-01-runbook`](../../artifact/ops/verify/PROFILE-ADDRESS-VERIFY-01-runbook.md) A01–A05 **PASS** ([run](../../artifact/ops/verify/runs/2026-05-31-PROFILE-ADDRESS-VERIFY-01.md)) |
+
+### 2.7 개발 운영 — external API inventory SoT
+
+사업자등록·계약 **일괄 처리** 전까지 Tier A/B/I로 외부 연동 목록·갈아끼우기 경계 정리.
+
+| 항목 | 내용 |
+|------|------|
+| 문서 | [`external-integrations.md`](../../artifact/as-built/external-integrations.md) · `as-built/README` · `06-integrations-and-config` cross-link |
+| 정책 | Tier **A**(지금 OK: 동행복권·Google OAuth·Daum postcode·OpenAI dev) · **B**(PG·NICE·AdSense 등 batch 후) |
+
 ---
 
 ## 3. 문제와 해결
@@ -111,6 +130,7 @@ _(해당 없음)_
 - 도메인·크롤은 정합; **카피·볼 색·참조 UX**가 정보 서비스 빈틈이었다.
 - **보드 clear 후** devlog §5만으로는 후속이 끊긴다 — flow-up + Backlog 재등록이 필요.
 - 재미 기능(문자 시드)은 **추천 파이프라인과 분리**하면 범위 A를 빠르게 닫을 수 있다.
+- **Tier A/B**로 외부 연동을 나누면 사업자등록 전에도 Mock·flag off만 유지하면서 갈아끼울 수 있다.
 
 ---
 
@@ -121,7 +141,6 @@ _(해당 없음)_
 #### Planet645
 
 - [ ] `FEAT-TEXT-SEED-PREVIEW-B-01` — 문자 시드 범위 B · 고정/제외 번호 채우기
-- [x] `PROFILE-ADDRESS-VERIFY-01` — 주소 수동 verify PASS ([runbook](../../artifact/ops/verify/runs/2026-05-31-PROFILE-ADDRESS-VERIFY-01.md))
 - [ ] `IDENTITY-CI-PASS-01` — PASS/NICE · CI E2E
 - [ ] (선택) `RECOMMEND-V1-E2E-01` · `AD-MISSION-BETA-01`
 
@@ -139,6 +158,8 @@ _(해당 없음)_
 | 문자 시드 미리보기 A · verify PASS | [§2.3](#23-문자-시드-미리보기--범위-a-planet645) |
 | flow-up · Backlog · 아카이브 | [§2.4](#24-개발-운영--후속-flow-up-517530) |
 | draw645 UX (`INFO-DRAW645-UX-01`) | [§2.5](#25-draw645-ux-후속-planet645) |
+| 프로필 주소 verify PASS | [§2.6](#26-프로필-주소-verify-planet645) |
+| external API inventory SoT | [§2.7](#27-개발-운영--external-api-inventory-sot) |
 
 ---
 
@@ -148,3 +169,4 @@ _(해당 없음)_
 - Planet645: 번호 추천·통계 **엔터테인먼트**(복권 판매·당첨금 지급 아님)
 - 문자 시드: [`text-seed-base45-preview-spec.md`](../../artifact/design/recommendation-ml/text-seed-base45-preview-spec.md) · verify [`runs/2026-05-31-FEAT-TEXT-SEED-PREVIEW-A-01.md`](../../artifact/ops/verify/runs/2026-05-31-FEAT-TEXT-SEED-PREVIEW-A-01.md)
 - Flow-up SoT: `artifact/ops/tasks/board.md` · `archive/archive-history-2026-06-01.md`
+- External API: [`external-integrations.md`](../../artifact/as-built/external-integrations.md)
