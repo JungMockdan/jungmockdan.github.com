@@ -1,17 +1,17 @@
 ---
 title: "개발일지 — 2026-05-31 (동행복권 정합 · 문자 시드 · flow-up)"
-excerpt: "동행복권 정합·/info/draw645. 문자 시드(text-seed-v1) 미리보기 범위 A·verify PASS. 추천 v1 unit/verify 아카이브·보드 flow-up."
+excerpt: "동행복권 정합·draw645 UX·문자 시드 범위 A verify PASS. INFO-DRAW645-UX-01 완료·범위 B 보드 등록."
 categories: [deVlog]
 tags: [planet645, spring, thymeleaf, ui, dhlottery, recommend, 개발일지]
 toc: true
 toc_sticky: true
 date: 2026-05-31 17:31:58 +0900
-last_modified_at: 2026-05-31 21:48:53 +0900
+last_modified_at: 2026-05-31 22:12:00 +0900
 ---
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
-> **하루 요약:** [동행복권 소개](https://m.dhlottery.co.kr/lt645/intro) 정합 → **랜딩 · 볼색 · `/info/draw645`**. **문자 시드**(`text-seed-v1`) — 문장→결정적 6번호 미리보기·verify T01–T07 PASS. **5/17–5/30 flow-up** — 보드 Backlog `262`–`271` ([§2.3](#23-개발-운영--후속-flow-up-517530)).
+> **하루 요약:** [동행복권 소개](https://m.dhlottery.co.kr/lt645/intro) 정합 → **랜딩 · 볼색 · `/info/draw645` · UX 후속**. **문자 시드**(`text-seed-v1`) 범위 A verify PASS · **범위 B** 보드 등록. **5/17–5/30 flow-up** — Backlog `264`–`271` ([§2.4](#24-개발-운영--후속-flow-up-517530)).
 
 ## 1. 오늘 목표
 
@@ -20,11 +20,13 @@ last_modified_at: 2026-05-31 21:48:53 +0900
 - [x] 동행복권 vs Planet645 도메인·UI 정합 점검
 - [x] 랜딩 솔직 엔터테인 톤 · 로또볼 공식 구간 · `/info/draw645`
 - [x] 문자 시드 미리보기 범위 A (`FEAT-TEXT-SEED-PREVIEW-A-01`)
+- [x] draw645 UX 후속 (`INFO-DRAW645-UX-01`)
 
 ### 개발 운영
 
 - [x] 5/17–5/30 일지 §5 후속 flow-up · 보드 Backlog 재등록
 - [x] 추천 v1 unit · verify runbook PASS → 아카이브
+- [x] 문자 시드 범위 B 보드 등록 (`FEAT-TEXT-SEED-PREVIEW-B-01`)
 
 ---
 
@@ -36,7 +38,7 @@ last_modified_at: 2026-05-31 21:48:53 +0900
 |------|------|------|
 | 당첨 등수 · 번호 범위 · 크롤·스케줄 | 일치 | `LottoOfficialRankCalculator`, 1~45, 토 20:00/20:35~ |
 | 서비스 성격 | 일치 | 비판매 · 엔터테인 · LLM 도박성 필터 |
-| 랜딩 카피 · 로또볼 · 기초 정보 UX | 불일치/부재 | → [§2.2](#22-정합-보완-구현-planet645) |
+| 랜딩 카피 · 로또볼 · 기초 정보 UX | 불일치/부재 | → [§2.2](#22-정합-보완-구현-planet645) · [§2.5](#25-draw645-ux-후속-planet645) |
 
 ### 2.2 정합 보완 구현 (Planet645)
 
@@ -55,19 +57,26 @@ last_modified_at: 2026-05-31 21:48:53 +0900
 | 알고리즘 | `text-seed-v1` — NFC → SHA-256 → 바이트 `% 45 + 1` (6개 유일·오름차순) |
 | Golden | `planet645` → `6,9,21,26,35,44` · `안녕` → `8,19,24,26,30,33` |
 | API/UI | `GET /recommend/text-seed/preview` · `text-seed-preview.html` · select 1단계 `<details>` |
-| 코드 | `TextSeedNumberExtractor` · `RecommendController` · 단위·컨트롤러 테스트 green |
+| verify | [`FEAT-TEXT-SEED-PREVIEW-A-01-runbook.md`](../../artifact/ops/verify/FEAT-TEXT-SEED-PREVIEW-A-01-runbook.md) T01–T07 PASS (`8081`) |
 
 ### 2.4 개발 운영 — 후속 flow-up (5/17–5/30)
 
-범위: [5/17](2026-05-17-developer-log.md)–[5/30](2026-05-30-developer-log.md) 일지 §5 · `board.md` · `archive-history-2026-06-01.md`.
+범위: [5/17](2026-05-17-developer-log.md)–[5/30](2026-05-30-developer-log.md) 일지 §5 · [`board.md`](../../artifact/ops/tasks/board.md) · [`archive-history-2026-06-01.md`](../../artifact/ops/tasks/archive/archive-history-2026-06-01.md).
 
 | 지표 | 상태 |
 |------|------|
-| 구현 → 아카이브 | ✅ `RECOMMEND-NUMBERS-V1-01` · `RECOMMEND-V1-UNIT-01` · `RECOMMEND-V1-VERIFY-01` |
-| §5 → 보드 | ✅ Backlog `262`–`271` ([`board.md`](../../artifact/ops/tasks/board.md)) |
-| 문자 시드 | ✅ `FEAT-TEXT-SEED-PREVIEW-A-01` implement·verify — [`FEAT-TEXT-SEED-PREVIEW-A-01-runbook.md`](../../artifact/ops/verify/FEAT-TEXT-SEED-PREVIEW-A-01-runbook.md) T01–T07 PASS (`8081`; `8080` 구빌드 preview 500) |
+| 구현 → 아카이브 | ✅ `RECOMMEND-NUMBERS-V1-01` · `RECOMMEND-V1-UNIT-01` · `RECOMMEND-V1-VERIFY-01` · `FEAT-TEXT-SEED-PREVIEW-A-01` · `INFO-DRAW645-UX-01` |
+| §5 → 보드 | ✅ Backlog `264`–`271` — `FEAT-TEXT-SEED-PREVIEW-B-01`(271) 신규 |
 
-**판정:** 큰 기능·후속 verify는 아카이브까지 연결. **문자 시드**는 범위 A 완료·`review_pending`.
+### 2.5 draw645 UX 후속 (Planet645)
+
+`INFO-DRAW645-UX-01` — 기초 정보 페이지는 선행 완료, **노출·라벨·대시보드**만 후속.
+
+| 항목 | 변경 |
+|------|------|
+| **링크** | `login.html` · `fragments/site-footer.html` · `auth_layout` 푸터 |
+| **detail** | 미사용 `probability` 「당첨 확률」 카드 제거 |
+| **대시보드** | `LottoDrawDetail.findTopByOrderByLtEpsdDesc` → `prizeLabel` (`{회차}회 1등 {금액}원`) |
 
 ---
 
@@ -111,11 +120,10 @@ _(해당 없음)_
 
 #### Planet645
 
-- [ ] `INFO-DRAW645-UX-01` — detail 확률 라벨 · prizeLabel · info 링크
+- [ ] `FEAT-TEXT-SEED-PREVIEW-B-01` — 문자 시드 범위 B · 고정/제외 번호 채우기
 - [ ] `PROFILE-ADDRESS-VERIFY-01` — 주소 수동 verify
 - [ ] `IDENTITY-CI-PASS-01` — PASS/NICE · CI E2E
 - [ ] (선택) `RECOMMEND-V1-E2E-01` · `AD-MISSION-BETA-01`
-- [ ] (선택) 문자 시드 **범위 B** — 고정 번호 채우기
 
 #### 개발 운영
 
@@ -128,8 +136,9 @@ _(해당 없음)_
 |------|-----|
 | 동행복권 정합 점검 | [§2.1](#21-동행복권-정합-점검-planet645) |
 | 랜딩 · 볼색 · `/info/draw645` | [§2.2](#22-정합-보완-구현-planet645) |
-| 문자 시드 미리보기 A · verify PASS · 보드 아카이브 | [§2.3](#23-문자-시드-미리보기--범위-a-planet645) |
-| flow-up · Backlog · 추천 v1 unit/verify 아카이브 | [§2.4](#24-개발-운영--후속-flow-up-517530) |
+| 문자 시드 미리보기 A · verify PASS | [§2.3](#23-문자-시드-미리보기--범위-a-planet645) |
+| flow-up · Backlog · 아카이브 | [§2.4](#24-개발-운영--후속-flow-up-517530) |
+| draw645 UX (`INFO-DRAW645-UX-01`) | [§2.5](#25-draw645-ux-후속-planet645) |
 
 ---
 
