@@ -121,7 +121,7 @@ _(해당 없음)_
 #### Planet645
 
 - [ ] `FEAT-TEXT-SEED-PREVIEW-B-01` — 문자 시드 범위 B · 고정/제외 번호 채우기
-- [ ] `PROFILE-ADDRESS-VERIFY-01` — 주소 수동 verify
+- [x] `PROFILE-ADDRESS-VERIFY-01` — 주소 수동 verify PASS ([runbook](../../artifact/ops/verify/runs/2026-05-31-PROFILE-ADDRESS-VERIFY-01.md))
 - [ ] `IDENTITY-CI-PASS-01` — PASS/NICE · CI E2E
 - [ ] (선택) `RECOMMEND-V1-E2E-01` · `AD-MISSION-BETA-01`
 
