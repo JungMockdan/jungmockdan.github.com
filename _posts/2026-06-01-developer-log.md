@@ -6,7 +6,7 @@ tags: [planet645, spring, java, 개발일지]
 toc: true
 toc_sticky: true
 date: 2026-06-01 21:58:07 +0900
-last_modified_at: 2026-06-01 22:14:15 +0900
+last_modified_at: 2026-06-01 22:46:25 +0900
 ---
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
@@ -31,12 +31,12 @@ last_modified_at: 2026-06-01 22:14:15 +0900
 
 **2026-05-31 이월**
 
-- [ ] `SECURITY-SECRETS-CI-01` — secrets-guard CI
 - [ ] `SECURITY-DEPENDENCY-CVSS-01` — CVSS fail gate
 
 **당일 신규**
 
 - [x] `@SpringBootTest` 공통 Mock `@Import` (`SpringBootTestExternalDependencyMocks`)
+- [x] `SECURITY-SECRETS-CI-01` — `quality-gate` `secrets-guard` job · runbook §4.1
 
 ---
 
@@ -68,6 +68,15 @@ last_modified_at: 2026-06-01 22:14:15 +0900
 | 원인 | 커스텀 `.number-ball`(단색) → `lotto-ball` 프래그먼트 `th:replace`/`th:insert`가 레이아웃·`th:each` 조합에서 `num` 미전달 |
 | 해결 | `th:each` + `th:text` 유지, `lotto-number lotto-ball-lg` + `lotto-1`~`lotto-5` `th:classappend` (`design-system.css`) |
 | 경로 | `templates/content/recommend/text-seed-preview.html` |
+
+### 2.4 secrets-guard CI 연동 (개발 운영)
+
+| 산출 | 경로 |
+|------|------|
+| `secrets-guard` job · `needs` gate | `.github/workflows/quality-gate.yml` |
+| Spring/ML/LLM checkout 후 guard | `scripts/check-secrets-guard.sh` |
+| runbook §4.1 | `artifact/runbook/security/secrets-governance.md` |
+| 보드·아카이브 | `SECURITY-SECRETS-CI-01` |
 
 ---
 
@@ -120,7 +129,6 @@ _(해당 없음)_
 
 **2026-05-31 이월**
 
-- [ ] `SECURITY-SECRETS-CI-01` — secrets-guard CI
 - [ ] `SECURITY-DEPENDENCY-CVSS-01` — CVSS fail gate
 
 ### 5.2 완료 (인덱스)
@@ -130,6 +138,7 @@ _(해당 없음)_
 | IDE Problems · 경고 정리 | [§2.1](#21-ide-problems--경고-정리-planet645) |
 | 통합 테스트 Mock 공통화 | [§2.2](#22-통합-테스트-mock-공통화-개발-운영) |
 | 문자 시드 미리보기 볼 UI | [§2.3](#23-문자-시드-미리보기--로또-볼-ui-planet645) |
+| secrets-guard CI | [§2.4](#24-secrets-guard-ci-연동-개발-운영) |
 
 ---
 

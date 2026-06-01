@@ -158,7 +158,7 @@ _(해당 없음)_
 
 #### 개발 운영
 
-- [ ] `SECURITY-SECRETS-CI-01` — secrets-guard CI
+- [x] `SECURITY-SECRETS-CI-01` — secrets-guard CI (`quality-gate` job)
 - [ ] `SECURITY-DEPENDENCY-CVSS-01` — CVSS fail gate
 
 ### 5.2 완료 (인덱스)
