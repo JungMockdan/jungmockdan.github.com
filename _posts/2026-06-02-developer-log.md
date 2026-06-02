@@ -1,24 +1,24 @@
 ---
-title: "개발일지 — 2026-06-02 (OWASP CVSS gate · Boot 3.5.14)"
-excerpt: "dependency-check CVSS≥9 fail gate 1단계, Boot 3.5.14·Tomcat/Netty BOM override, weekly OWASP CI fail 활성."
+title: "개발일지 — 2026-06-02 (CVSS gate · 자체 미션 베타)"
+excerpt: "OWASP CVSS≥9 gate·Boot 3.5.14, v1 자체 미션 베타(compose·verify), 문자 시드 B 잔여."
 categories: [deVlog]
 tags: [planet645, spring, security, 개발일지]
 toc: true
 toc_sticky: true
 date: 2026-06-02 21:29:46 +0900
-last_modified_at: 2026-06-02 21:30:36 +0900
+last_modified_at: 2026-06-02 21:52:05 +0900
 ---
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
-> **하루 요약:** OWASP **CVSS≥9** 게이트 1단계를 적용하고, Boot **3.5.14**·BOM override(Tomcat **10.1.55**, Netty **4.1.133**)로 `dependencyCheckAnalyze` **PASS**를 확인했다.
+> **하루 요약:** CVSS≥9 gate·Boot 3.5.14 정리에 이어, v1 **자체 미션 베타**(`AD-MISSION-BETA-01`) — compose·verify·보드 아카이브까지 마쳤다.
 
 ## 1. 오늘 목표
 
 ### Planet645
 
 - [ ] `FEAT-TEXT-SEED-PREVIEW-B-01` — 문자 시드 범위 B · 고정/제외 번호 채우기
-- [ ] (선택) `AD-MISSION-BETA-01`
+- [x] `AD-MISSION-BETA-01` — v1 자체 미션 베타
 
 ### 개발 운영
 
@@ -46,9 +46,19 @@ last_modified_at: 2026-06-02 21:30:36 +0900
 | BOM override | `tomcat.version=10.1.55`, `netty.version=4.1.133.Final` |
 | 검증 | `./gradlew dependencyCheckAnalyze` **PASS** (취약 12·최고 CVSS **7.5**) |
 
-### 2.2 Planet645
+### 2.2 v1 자체 미션 베타 (Planet645)
 
-_(해당 없음)_
+| 산출 | 경로 |
+|------|------|
+| prod+미션 compose | `docker-compose.mission-beta.yml` (`MISSION_ENABLED=true`) |
+| Verify runbook / run | `artifact/ops/verify/AD-MISSION-BETA-01-runbook.md` · `runs/2026-06-02-AD-MISSION-BETA-01.md` |
+| 보드 | `AD-MISSION-BETA-01` archived |
+
+| 단계 | 내용 |
+|------|------|
+| BM | v1 **자체 미션** + (선택) AdSense — 오퍼월은 v2 후보(AdiSON·NAS 등) |
+| 약관 D5 | `V5__terms_ad_tracking.sql` · `TERMS-AD-TRACKING-01` 선행 ✅ |
+| 검증 | B01·B04 PASS · B02–B03·B05 Docker 미기동 `skip` (AD-REWARD R02–R03 2026-05-24 + Gradle) |
 
 ---
 
@@ -63,7 +73,9 @@ _(해당 없음)_
 
 ### Planet645
 
-_(해당 없음)_
+| 문제 | 원인 | 해결 |
+|------|------|------|
+| Docker verify `skip` | WSL에서 Docker Desktop daemon 미기동 | compose·runbook 커맨드 문서화 · Desktop 기동 후 §2.1–2.2 재실행 |
 
 ---
 
@@ -72,6 +84,7 @@ _(해당 없음)_
 - **정리 → 패치 → 게이트** 순서가 맞다. baseline(63 CRITICAL) 상태에서 `failBuildOnCVSS=9`만 켜면 CI가 바로 빨갛다.
 - Boot minor 상향만으로 BOM이 최신 CVE 패치선에 못 미치면 **`ext` tomcat/netty override**가 필요하다.
 - Stage 1 통과 후에도 **CVSS 7.5**(Netty CVE-2026-42582 등)는 남는다 — stage 2(≥7)는 별도 태스크.
+- **매체 오퍼월**(AdiSON·NAS)은 웹 S2S 가능(v2) — v1 베타는 **자체 미션 플래그**만.
 
 ---
 
@@ -86,7 +99,6 @@ _(해당 없음)_
 **2026-06-01 이월**
 
 - [ ] `FEAT-TEXT-SEED-PREVIEW-B-01` — 문자 시드 범위 B · 고정/제외 번호 채우기
-- [ ] (선택) `AD-MISSION-BETA-01`
 
 #### 개발 운영
 
@@ -103,6 +115,7 @@ _(이월 항목 없음 — CVSS gate 완료)_
 | 항목 | §2 |
 |------|-----|
 | `SECURITY-DEPENDENCY-CVSS-01` — CVSS≥9 gate · baseline · Boot 3.5.14 | §2.1 |
+| `AD-MISSION-BETA-01` — v1 자체 미션 베타 · compose · verify | §2.2 |
 
 ---
 
