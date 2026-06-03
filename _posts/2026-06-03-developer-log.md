@@ -1,23 +1,24 @@
 ---
-title: "개발일지 — 2026-06-03 (문자 시드 B · select 인라인)"
-excerpt: "문자 시드 B — 인라인 미리보기·좌/우클릭 칩·금칙·POST PRG(URL 무 phrase) · verify PASS."
+title: "개발일지 — 2026-06-03 (문자 시드 B · 내 번호 평가받기 PRD 설계)"
+excerpt: "문자 시드 B verify PASS · 내 번호 평가받기 PRD 확정(OQ-1~7) · evaluation 공유 모듈 설계 · QR 실측 파서."
 categories: [deVlog]
 tags: [planet645, recommend, 개발일지]
 toc: true
 toc_sticky: true
 date: 2026-06-03 08:29:37 +0900
-last_modified_at: 2026-06-03 21:34:33 +0900
+last_modified_at: 2026-06-03 22:13:45 +0900
 ---
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
-> **하루 요약:** 문자 시드 **범위 B** — select step1 인라인 미리보기, 좌클릭 고정/우클릭 제외 칩, 금칙·로그 마스킹, **POST+PRG**로 URL에 문장 미노출. preview 템플릿 제거·verify PASS.
+> **하루 요약:** 문자 시드 **범위 B** verify PASS. 오후 — **내 번호 평가받기** 신규 제품 축 PRD 확정(OQ-1~7 전부 종료) · evaluation 공유 모듈 설계(`01-evaluation-module.md`) · QR 캡처 설계(`04-slip-capture.md`) · 실측 QR `v=` 파서 확정.
 
 ## 1. 오늘 목표
 
 ### Planet645
 
-- [x] `FEAT-TEXT-SEED-PREVIEW-B-01` — 문자 시드 범위 B · select 인라인 · 고정/제외 칩
+- [x] `FEAT-TEXT-SEED-PREVIEW-B-01` — 문자 시드 범위 B (인라인 미리보기 · 좌/우클릭 칩 · POST PRG · 금칙·로그 마스킹 · verify·보드 아카이브)
+- [x] `FEAT-MY-NUMBER-EVAL-01` — **설계** — PRD 확정(OQ-1~7) · `01-evaluation-module` · `04-slip-capture` · QR 실측 파서
 
 ### 개발 운영
 
@@ -52,6 +53,28 @@ last_modified_at: 2026-06-03 21:34:33 +0900
 | 로그 | `TextSeedQueryMaskingFilter` — query `phrase`/`q` → `[redacted]` |
 | UI 안내 | 미저장 · POST · 금칙 문구 (`select.html`) |
 
+### 2.3 내 번호 평가받기 — PRD 확정 (Planet645)
+
+| 산출 | 경로 |
+|------|------|
+| PRD **확정** | `artifact/prd/my-number-evaluation.md` — OQ-1~7 전부 종료 |
+| 모듈 설계 | `artifact/design/my-number-evaluation/01-evaluation-module.md` |
+| 캡처 설계 | `artifact/design/my-number-evaluation/04-slip-capture.md` |
+| 보드 | `FEAT-MY-NUMBER-EVAL-01` backlog `272` |
+| DOCS_INDEX | 신규 항목 2건 등재 |
+
+**핵심 결정 (요약):**
+
+| 항목 | 결정 |
+|------|------|
+| 포지셔닝 | 번호 추천과 분리된 상위 메뉴 — 「내가 고른/산 번호 평가」 |
+| 공유 모듈 | `NumberEvaluationService` — STANDALONE + PREMIUM 추천 결과 |
+| LLM 해설 | PREMIUM 권한만 · 팩트 JSON 기반 (헛소리 톤) |
+| 캡처 | QR 디코딩 1순위 · 붙여넣기(온라인) · OCR 최후 폴백 |
+| QR 파서 | 실측 검증 ✅ 1226회 5게임 — `[a-z]` split · 앞 12자리 · 꼬리 버림 |
+| 쌍/삼 집계 | 메모리 캐시 (기동/신규 회차 시) |
+| 이력 | 번호·요약만 저장 · OCR 원본 즉시 폐기 |
+
 ---
 
 ## 3. 문제와 해결
@@ -78,6 +101,14 @@ _(해당 없음)_
 
 ### 5.1 미완
 
+> **이월:** [2026-06-02-developer-log.md](2026-06-02-developer-log.md) §5.1
+
+#### Planet645
+
+**당일 신규 (구현 — §1 설계 완료와 분리)**
+
+- [ ] `FEAT-MY-NUMBER-EVAL-01` — M1 UI (`02-input-and-report-ui.md`) + `evaluation` 모듈 **구현**
+
 #### 개발 운영
 
 **2026-06-02 이월**
@@ -89,6 +120,7 @@ _(해당 없음)_
 | 항목 | §2 |
 |------|-----|
 | `FEAT-TEXT-SEED-PREVIEW-B-01` — 인라인 · 칩 UX · 금칙 · POST PRG | §2.1–§2.2 |
+| `FEAT-MY-NUMBER-EVAL-01` PRD 확정 + 모듈·캡처 설계 | §2.3 |
 
 ---
 
