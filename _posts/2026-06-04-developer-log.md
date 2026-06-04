@@ -6,12 +6,12 @@ tags: [planet645, evaluate, security, ml, ui-kit, 개발일지]
 toc: true
 toc_sticky: true
 date: 2026-06-04 08:48:06 +0900
-last_modified_at: 2026-06-04 22:10:13 +0900
+last_modified_at: 2026-06-04 22:13:46 +0900
 ---
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
-> **하루 요약:** 평가 M1~M4(OCR 제외) · ML B1~B3 · **React promote 4화면** · Lab **UI Kit**(`design-guide-v02` 버튼·박스·아이콘 SoT).
+> **하루 요약:** 평가 M1~M4(OCR 제외) · ML B1~B3 · **React promote 4화면** · Lab **UI Kit** · 랜딩 user flow·SVG·CTA 정리.
 
 ## 1. 오늘 목표
 
@@ -21,6 +21,7 @@ last_modified_at: 2026-06-04 22:10:13 +0900
 - [x] ML-RANKING-INTERNALS-01~03 — §2.5~§2.7
 - [x] UI React Lab · promote 4화면 — §2.9~§2.11
 - [x] Lab UI Kit 정적 리소스 — §2.12
+- [x] React 랜딩 user flow · SVG·CTA — §2.13
 
 ### 개발 운영
 
@@ -146,6 +147,18 @@ OQ-7 B · verify runbook **스킵** · `UI-REACT-LAB-01` · `UI-REACT-PROMOTE-01
 
 `sync:assets` = SVG + UI kit · primary 색 `--p645-navy` 연동.
 
+### 2.13 React 랜딩 — user flow · SVG · UI Kit CTA (Planet645)
+
+`user-flow-v1.md` · Spring `LandingController` / `GET /start`와 동기화.
+
+| 산출 | 내용 |
+|------|------|
+| 인증 | `GET /api/v1/ui/entry-target` · Lab `ensureEntryPath` · CTA는 서버 `/start` 위임 |
+| SVG | `manifest.ts` — `import.meta.env.BASE_URL` (`/planet645-react/…`) |
+| UI Kit | 랜딩 **시작하기** → `p645-btn--primary` + `UiKitIcon`(`p645-planet`) |
+| UX | 헤더 캐릭터 3종·CTA 위 복실 제거 |
+| Spring | `AnonymousAuthenticationToken` `/start` → `/login` · `build:spring` 반영 |
+
 ---
 
 ## 3. 문제와 해결
@@ -162,6 +175,12 @@ OQ-7 B · verify runbook **스킵** · `UI-REACT-LAB-01` · `UI-REACT-PROMOTE-01
 |------|------|------|
 | host `model_training` DB 실패 | `mariadb`/`xgboost` 미설치 | 코드·단위테스트 green; DB 연동 시 `python3 -m core.model_training`로 xgb+calibrator 동시 갱신 |
 
+### 3.3 Planet645 — Spring embed SVG 404
+
+| 문제 | 원인 | 해결 |
+|------|------|------|
+| `planet645-logo-icon.svg` 404 | Lab 경로 `/planet645-svg-assets` — Vite `base` `/planet645-react/` 미반영 | `BASE_URL` 접두 + `build:spring` |
+
 ### 개발 운영
 
 _(해당 없음)_
@@ -175,6 +194,7 @@ _(해당 없음)_
 - curl SSR manual `line[]` 검증 시 Spring 배열 바인딩 쉼표 분할 주의.
 - React promote는 Thymeleaf 레이아웃(TNB) 없이 `PageShell` 링크로 시작; 데이터는 `/api/v1/ui/*` + 세션.
 - UI Kit은 `design/` SoT → `public/` 동기화 패턴을 캐릭터 SVG와 동일하게 두면 Thymeleaf·React가 같은 URL로 공유 가능.
+- post-auth 분기(로그인·프로필·온보딩)는 클라이언트 `/api/v1/me` 추측보다 **`/start`·`entry-target`** 서버 위임이 SoT와 맞다.
 
 ---
 
@@ -207,6 +227,7 @@ _(해당 없음)_
 | Lab 에셋 sync | §2.10 |
 | React promote 4화면 | §2.11 |
 | Lab UI Kit (design-guide-v02) | §2.12 |
+| 랜딩 user flow · SVG · CTA | §2.13 |
 
 ---
 
