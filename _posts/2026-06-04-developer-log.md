@@ -1,17 +1,17 @@
 ---
-title: "개발일지 — 2026-06-04 (평가 M1~M4 · ML 트랙 B 완료)"
-excerpt: "평가 M1~M4(OCR 제외) · OWASP stage 2 · ML B1~B3(NDCG·hard neg·isotonic mlScore)"
+title: "개발일지 — 2026-06-04 (평가·ML B · 랜딩 React promote)"
+excerpt: "평가 M1~M4(OCR 제외) · ML B1~B3 · 랜딩 `/` React 전환(OQ-7 B) · Lab v1 아카이브"
 categories: [deVlog]
 tags: [planet645, evaluate, security, ml, 개발일지]
 toc: true
 toc_sticky: true
 date: 2026-06-04 08:48:06 +0900
-last_modified_at: 2026-06-04 12:54:42 +0900
+last_modified_at: 2026-06-04 16:56:27 +0900
 ---
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
-> **하루 요약:** 내 번호 평가 **M1 verify~M4**(OCR 제외) · OWASP **stage 2** · ML 내실화 **B1~B3** 완료(오프라인 NDCG · hard negative · isotonic mlScore).
+> **하루 요약:** 평가 M1~M4(OCR 제외) · ML B1~B3 · **랜딩 `/` React promote**(`planet645-react` · verify runbook 스킵) · 후속 화면 큐 `UI-REACT-PROMOTE-01`.
 
 ## 1. 오늘 목표
 
@@ -101,6 +101,31 @@ PREMIUM 구독 ACTIVE만 해설 · 크레딧 미차감(OQ-1).
 | SoT | `artifact/runbook/security/dependency-cvss-baseline.md` |
 | 아카이브 | `ML-RANKING-INTERNALS-01~03` → `archive-history-2026-06-08.md` |
 
+### 2.9 UI React Lab · 캐릭터 SVG (Planet645)
+
+| 산출 | 경로 |
+|------|------|
+| Lab 앱 | `com.mockdan.planet645-ui-lab/` (자체 Git) |
+| SVG SoT | Lab `design/planet645-svg-assets/` |
+| 랜딩 mock | `CharacterAsset` · `PlanetLogo` |
+
+### 2.10 개발 운영 — Lab 에셋 동기화
+
+| 산출 | 경로 |
+|------|------|
+| 스크립트 | `npm run sync:svg` · `sync_character_assets.py` (PNG) |
+
+### 2.11 랜딩 React promote (Planet645)
+
+| 산출 | 경로 |
+|------|------|
+| Spring | `LandingController` → `forward:/planet645-react/index.html` |
+| static | `src/main/resources/static/planet645-react/` |
+| Lab 빌드 | `npm run build:spring` · `BUILD_FOR_SPRING` base `/planet645-react/` |
+| 갭 메모 | `artifact/design/ui/lab/landing-thymeleaf-gap-2026-06-04.md` |
+
+OQ-7 B · verify runbook **스킵**. `UI-REACT-LAB-01` 아카이브 → Active `UI-REACT-PROMOTE-01`(추천 결과·대시보드·평가 pending).
+
 ---
 
 ## 3. 문제와 해결
@@ -137,7 +162,10 @@ _(해당 없음)_
 
 #### Planet645
 
-- [ ] `FEAT-MY-NUMBER-EVAL-01` — M3 **OCR** (Tesseract.js · 후속)
+- [ ] `UI-REACT-PROMOTE-01` — `/recommend/result` React (runbook 스킵)
+- [ ] `UI-REACT-PROMOTE-01` — `/dashboard` React
+- [ ] `UI-REACT-PROMOTE-01` — `/evaluate` React
+- [ ] `FEAT-MY-NUMBER-EVAL-01` — M3 **OCR** (후속)
 
 #### 개발 운영
 
@@ -155,6 +183,9 @@ _(해당 없음)_
 | ML B2 hard neg | §2.6 |
 | ML B3 calibration | §2.7 |
 | OWASP stage 2 · 보드 | §2.8 |
+| UI React Lab · SVG | §2.9 |
+| Lab 에셋 sync | §2.10 |
+| 랜딩 React promote | §2.11 |
 
 ---
 
