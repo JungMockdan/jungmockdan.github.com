@@ -1,17 +1,17 @@
 ---
-title: "개발일지 — 2026-06-04 (평가·ML B · 랜딩 React promote)"
-excerpt: "평가 M1~M4(OCR 제외) · ML B1~B3 · 랜딩 `/` React 전환(OQ-7 B) · Lab v1 아카이브"
+title: "개발일지 — 2026-06-04 (평가·ML B · React promote 4화면)"
+excerpt: "평가 M1~M4 · ML B1~B3 · React promote `/`·결과·대시보드·평가(OQ-7 B, runbook 스킵)"
 categories: [deVlog]
 tags: [planet645, evaluate, security, ml, 개발일지]
 toc: true
 toc_sticky: true
 date: 2026-06-04 08:48:06 +0900
-last_modified_at: 2026-06-04 16:56:27 +0900
+last_modified_at: 2026-06-04 17:33:58 +0900
 ---
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
-> **하루 요약:** 평가 M1~M4(OCR 제외) · ML B1~B3 · **랜딩 `/` React promote**(`planet645-react` · verify runbook 스킵) · 후속 화면 큐 `UI-REACT-PROMOTE-01`.
+> **하루 요약:** 평가 M1~M4(OCR 제외) · ML B1~B3 · **React promote 4화면**(`planet645-react` + `/api/v1/ui/*`) · `UI-REACT-PROMOTE-01` 완료.
 
 ## 1. 오늘 목표
 
@@ -19,6 +19,7 @@ last_modified_at: 2026-06-04 16:56:27 +0900
 
 - [x] M1 verify · M2 LLM · M3 QR · M4 CTA — §2.1~§2.4
 - [x] ML-RANKING-INTERNALS-01~03 — §2.5~§2.7
+- [x] UI React Lab · promote 4화면 — §2.9~§2.11
 
 ### 개발 운영
 
@@ -115,16 +116,18 @@ PREMIUM 구독 ACTIVE만 해설 · 크레딧 미차감(OQ-1).
 |------|------|
 | 스크립트 | `npm run sync:svg` · `sync_character_assets.py` (PNG) |
 
-### 2.11 랜딩 React promote (Planet645)
+### 2.11 React promote 4화면 (Planet645)
 
-| 산출 | 경로 |
-|------|------|
-| Spring | `LandingController` → `forward:/planet645-react/index.html` |
-| static | `src/main/resources/static/planet645-react/` |
-| Lab 빌드 | `npm run build:spring` · `BUILD_FOR_SPRING` base `/planet645-react/` |
-| 갭 메모 | `artifact/design/ui/lab/landing-thymeleaf-gap-2026-06-04.md` |
+OQ-7 B · verify runbook **스킵** · `UI-REACT-LAB-01` · `UI-REACT-PROMOTE-01` 아카이브.
 
-OQ-7 B · verify runbook **스킵**. `UI-REACT-LAB-01` 아카이브 → Active `UI-REACT-PROMOTE-01`(추천 결과·대시보드·평가 pending).
+| URL | Spring | Lab |
+|-----|--------|-----|
+| `/` | `LandingController` forward | `LandingPage.tsx` |
+| `/recommend/result` | forward + `GET /api/v1/ui/recommend/result` | `RecommendResultPage.tsx` |
+| `/dashboard` | forward + `GET /api/v1/ui/dashboard` | `DashboardPage.tsx` |
+| `/evaluate` | GET forward · POST 유지 | `EvaluateInputPage.tsx` (QR 후속) |
+
+공통: `planet645-react/` static · `npm run build:spring` · `App.tsx` pathname 라우팅 · 갭 `artifact/design/ui/lab/*-thymeleaf-gap-2026-06-04.md`.
 
 ---
 
@@ -153,6 +156,7 @@ _(해당 없음)_
 - hard negative는 near-miss만으로도 랭킹 쿼리(회차 풀) 변별이 커진다; 풀분포는 추천 23풀과 **분포 정합**만 맞추는 프록시로 시작 가능.
 - isotonic은 API 필드는 그대로 두고 점수 간격만 보정 — M1 카피 동기화 없이 배포 가능.
 - curl SSR manual `line[]` 검증 시 Spring 배열 바인딩 쉼표 분할 주의.
+- React promote는 Thymeleaf 레이아웃(TNB) 없이 `PageShell` 링크로 시작; 데이터는 `/api/v1/ui/*` + 세션.
 
 ---
 
@@ -162,10 +166,8 @@ _(해당 없음)_
 
 #### Planet645
 
-- [ ] `UI-REACT-PROMOTE-01` — `/recommend/result` React (runbook 스킵)
-- [ ] `UI-REACT-PROMOTE-01` — `/dashboard` React
-- [ ] `UI-REACT-PROMOTE-01` — `/evaluate` React
 - [ ] `FEAT-MY-NUMBER-EVAL-01` — M3 **OCR** (후속)
+- [ ] React promote 잔여 — TNB shell · `/evaluate` QR jsQR 이식
 
 #### 개발 운영
 
@@ -185,7 +187,7 @@ _(해당 없음)_
 | OWASP stage 2 · 보드 | §2.8 |
 | UI React Lab · SVG | §2.9 |
 | Lab 에셋 sync | §2.10 |
-| 랜딩 React promote | §2.11 |
+| React promote 4화면 | §2.11 |
 
 ---
 
