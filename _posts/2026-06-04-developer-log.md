@@ -1,17 +1,17 @@
 ---
 title: "개발일지 — 2026-06-04 (평가·ML B · React promote 4화면)"
-excerpt: "평가 M1~M4 · ML B1~B3 · React promote `/`·결과·대시보드·평가(OQ-7 B, runbook 스킵)"
+excerpt: "평가·ML B · React promote · Lab UI Kit·거친 스케치 질감(design-guide-v02)"
 categories: [deVlog]
-tags: [planet645, evaluate, security, ml, 개발일지]
+tags: [planet645, evaluate, security, ml, ui-kit, 개발일지]
 toc: true
 toc_sticky: true
 date: 2026-06-04 08:48:06 +0900
-last_modified_at: 2026-06-04 17:33:58 +0900
+last_modified_at: 2026-06-04 22:40:13 +0900
 ---
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
-> **하루 요약:** 평가 M1~M4(OCR 제외) · ML B1~B3 · **React promote 4화면**(`planet645-react` + `/api/v1/ui/*`) · `UI-REACT-PROMOTE-01` 완료.
+> **하루 요약:** 평가 M1~M4(OCR 제외) · ML B1~B3 · React promote 4화면 · Lab UI Kit + **거친 선·채색** · 랜딩 flow·CTA.
 
 ## 1. 오늘 목표
 
@@ -20,6 +20,8 @@ last_modified_at: 2026-06-04 17:33:58 +0900
 - [x] M1 verify · M2 LLM · M3 QR · M4 CTA — §2.1~§2.4
 - [x] ML-RANKING-INTERNALS-01~03 — §2.5~§2.7
 - [x] UI React Lab · promote 4화면 — §2.9~§2.11
+- [x] Lab UI Kit · 거친 스케치 질감 — §2.12
+- [x] React 랜딩 user flow · SVG·CTA — §2.13
 
 ### 개발 운영
 
@@ -129,6 +131,35 @@ OQ-7 B · verify runbook **스킵** · `UI-REACT-LAB-01` · `UI-REACT-PROMOTE-01
 
 공통: `planet645-react/` static · `npm run build:spring` · `App.tsx` pathname 라우팅 · 갭 `artifact/design/ui/lab/*-thymeleaf-gap-2026-06-04.md`.
 
+### 2.12 Lab UI Kit — design-guide-v02 (Planet645)
+
+`artifact/design/design-guide-v02.png` 기준 스케치 UI 프리미티브(캐릭터 SVG와 분리). v02 **거친 선·거친 채색** 반영.
+
+| 산출 | 경로 |
+|------|------|
+| SoT | `design/planet645-ui-kit/` |
+| 서빙 | `public/planet645-ui-kit/` · `npm run sync:ui-kit` |
+| 토큰·컴포넌트 | `tokens.css` · `ui-kit.css` · **`sketch-surfaces.css`** |
+| 거친 질감 | 다층 해칭(`--p645-fill-scribble-*`) · `::before` 흔들 테두리 · `::after` 그레인 |
+| SVG 필터 | `index.html` `#p645-sketch-wobble` · `LottoBallShell` 교차 해칭·`feDisplacementMap` |
+| 아이콘 | `icons/*.svg` · 스프라이트 · stroke 두께 상향 |
+| React | `src/ui-kit/` · `UiKitIcon` · `UiKitLottoBall` · `/design-kit` |
+| 문서 | `docs/UI-KIT.md` |
+
+`sync:assets` = SVG + UI kit · 랜딩 `sketch-box`·CTA `p645-btn` 동일 톤.
+
+### 2.13 React 랜딩 — user flow · SVG · UI Kit CTA (Planet645)
+
+`user-flow-v1.md` · Spring `LandingController` / `GET /start`와 동기화.
+
+| 산출 | 내용 |
+|------|------|
+| 인증 | `GET /api/v1/ui/entry-target` · Lab `ensureEntryPath` · CTA는 서버 `/start` 위임 |
+| SVG | `manifest.ts` — `import.meta.env.BASE_URL` (`/planet645-react/…`) |
+| UI Kit | 랜딩 **시작하기** → `p645-btn--primary` + `UiKitIcon`(`p645-planet`) |
+| UX | 헤더 캐릭터 3종·CTA 위 복실 제거 |
+| Spring | `AnonymousAuthenticationToken` `/start` → `/login` · `build:spring` 반영 |
+
 ---
 
 ## 3. 문제와 해결
@@ -145,6 +176,12 @@ OQ-7 B · verify runbook **스킵** · `UI-REACT-LAB-01` · `UI-REACT-PROMOTE-01
 |------|------|------|
 | host `model_training` DB 실패 | `mariadb`/`xgboost` 미설치 | 코드·단위테스트 green; DB 연동 시 `python3 -m core.model_training`로 xgb+calibrator 동시 갱신 |
 
+### 3.3 Planet645 — Spring embed SVG 404
+
+| 문제 | 원인 | 해결 |
+|------|------|------|
+| `planet645-logo-icon.svg` 404 | Lab 경로 `/planet645-svg-assets` — Vite `base` `/planet645-react/` 미반영 | `BASE_URL` 접두 + `build:spring` |
+
 ### 개발 운영
 
 _(해당 없음)_
@@ -157,6 +194,8 @@ _(해당 없음)_
 - isotonic은 API 필드는 그대로 두고 점수 간격만 보정 — M1 카피 동기화 없이 배포 가능.
 - curl SSR manual `line[]` 검증 시 Spring 배열 바인딩 쉼표 분할 주의.
 - React promote는 Thymeleaf 레이아웃(TNB) 없이 `PageShell` 링크로 시작; 데이터는 `/api/v1/ui/*` + 세션.
+- UI Kit은 `design/` SoT → `public/` 동기화로 URL 공유; **flat 단색만으로는 v02 톤이 안 나와** 해칭+pseudo 테두리+그레인 레이어가 필요.
+- post-auth 분기(로그인·프로필·온보딩)는 클라이언트 `/api/v1/me` 추측보다 **`/start`·`entry-target`** 서버 위임이 SoT와 맞다.
 
 ---
 
@@ -188,6 +227,8 @@ _(해당 없음)_
 | UI React Lab · SVG | §2.9 |
 | Lab 에셋 sync | §2.10 |
 | React promote 4화면 | §2.11 |
+| Lab UI Kit · 거친 스케치 | §2.12 |
+| 랜딩 user flow · SVG · CTA | §2.13 |
 
 ---
 
