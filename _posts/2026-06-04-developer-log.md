@@ -1,17 +1,17 @@
 ---
 title: "개발일지 — 2026-06-04 (평가·ML B · React promote 4화면)"
-excerpt: "평가 M1~M4 · ML B1~B3 · React promote `/`·결과·대시보드·평가(OQ-7 B, runbook 스킵)"
+excerpt: "평가·ML B · React promote 4화면 · Lab UI Kit(design-guide-v02 정적 프리미티브)"
 categories: [deVlog]
-tags: [planet645, evaluate, security, ml, 개발일지]
+tags: [planet645, evaluate, security, ml, ui-kit, 개발일지]
 toc: true
 toc_sticky: true
 date: 2026-06-04 08:48:06 +0900
-last_modified_at: 2026-06-04 17:33:58 +0900
+last_modified_at: 2026-06-04 22:10:13 +0900
 ---
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
-> **하루 요약:** 평가 M1~M4(OCR 제외) · ML B1~B3 · **React promote 4화면**(`planet645-react` + `/api/v1/ui/*`) · `UI-REACT-PROMOTE-01` 완료.
+> **하루 요약:** 평가 M1~M4(OCR 제외) · ML B1~B3 · **React promote 4화면** · Lab **UI Kit**(`design-guide-v02` 버튼·박스·아이콘 SoT).
 
 ## 1. 오늘 목표
 
@@ -20,6 +20,7 @@ last_modified_at: 2026-06-04 17:33:58 +0900
 - [x] M1 verify · M2 LLM · M3 QR · M4 CTA — §2.1~§2.4
 - [x] ML-RANKING-INTERNALS-01~03 — §2.5~§2.7
 - [x] UI React Lab · promote 4화면 — §2.9~§2.11
+- [x] Lab UI Kit 정적 리소스 — §2.12
 
 ### 개발 운영
 
@@ -129,6 +130,22 @@ OQ-7 B · verify runbook **스킵** · `UI-REACT-LAB-01` · `UI-REACT-PROMOTE-01
 
 공통: `planet645-react/` static · `npm run build:spring` · `App.tsx` pathname 라우팅 · 갭 `artifact/design/ui/lab/*-thymeleaf-gap-2026-06-04.md`.
 
+### 2.12 Lab UI Kit — design-guide-v02 (Planet645)
+
+`artifact/design/design-guide-v02.png` 기준 스케치 UI 프리미티브(캐릭터 SVG와 분리).
+
+| 산출 | 경로 |
+|------|------|
+| SoT | `com.mockdan.planet645-ui-lab/design/planet645-ui-kit/` |
+| 서빙 | `public/planet645-ui-kit/` · `npm run sync:ui-kit` |
+| 토큰·컴포넌트 CSS | `tokens.css` · `ui-kit.css` (`.p645-btn` · `.p645-box` · 알림·칩 등) |
+| 아이콘 | `icons/*.svg` · 스프라이트 `icons/icons.svg` |
+| React | `src/ui-kit/` · `<UiKitIcon />` |
+| 미리보기 | `/design-kit` |
+| 문서 | Lab `docs/UI-KIT.md` · workspace `artifact/design/characters/ASSET-PUBLISHING.md` 링크 |
+
+`sync:assets` = SVG + UI kit · primary 색 `--p645-navy` 연동.
+
 ---
 
 ## 3. 문제와 해결
@@ -157,6 +174,7 @@ _(해당 없음)_
 - isotonic은 API 필드는 그대로 두고 점수 간격만 보정 — M1 카피 동기화 없이 배포 가능.
 - curl SSR manual `line[]` 검증 시 Spring 배열 바인딩 쉼표 분할 주의.
 - React promote는 Thymeleaf 레이아웃(TNB) 없이 `PageShell` 링크로 시작; 데이터는 `/api/v1/ui/*` + 세션.
+- UI Kit은 `design/` SoT → `public/` 동기화 패턴을 캐릭터 SVG와 동일하게 두면 Thymeleaf·React가 같은 URL로 공유 가능.
 
 ---
 
@@ -188,6 +206,7 @@ _(해당 없음)_
 | UI React Lab · SVG | §2.9 |
 | Lab 에셋 sync | §2.10 |
 | React promote 4화면 | §2.11 |
+| Lab UI Kit (design-guide-v02) | §2.12 |
 
 ---
 
