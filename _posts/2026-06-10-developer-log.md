@@ -1,17 +1,17 @@
 ---
 title: "개발일지 — 2026-06-10 (대시보드 v03 반영 · 로또볼 복수 UI)"
-excerpt: "design-guide-v03 대시보드 React 임베드 반영 · 로또볼 UI 복수 운용 정책 확정 · Thymeleaf v03 스킨 WIP 보류"
+excerpt: "design-guide-v03 대시보드 React 임베드 반영 · 로또볼 UI 복수 운용 정책 확정 · v03 스킨 페이지 옵트인 구조 확정"
 categories: [deVlog]
 tags: [task-board, ui-kit, design-v03, lotto-ball, 개발일지]
 toc: true
 toc_sticky: true
 date: 2026-06-10 09:42:00 +0900
-last_modified_at: 2026-06-10 16:28:00 +0900
+last_modified_at: 2026-06-10 16:46:00 +0900
 ---
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
-> **하루 요약:** 보드 Active 없음 확인 후 design-guide-v03 검수 완료분 반영 — UI Lab v03(수채 로또볼·대시보드 다듬기) 커밋, `/dashboard` React 임베드 재발행, 로또볼 UI 복수 운용 정책 확정. Thymeleaf v03 스킨은 WIP 보류.
+> **하루 요약:** 보드 Active 없음 확인 후 design-guide-v03 검수 완료분 반영 — UI Lab v03(수채 로또볼·대시보드 다듬기) 커밋, `/dashboard` React 임베드 재발행, 로또볼 UI 복수 운용 정책 확정. Thymeleaf v03 스킨은 페이지 옵트인 구조로 확정·롤아웃 가이드 문서화.
 
 ## 1. 오늘 목표
 
@@ -56,10 +56,13 @@ last_modified_at: 2026-06-10 16:28:00 +0900
 - 클래스 네임스페이스가 `lotto-*` vs `p645-lotto-ball*`로 분리되어 충돌 없이 공존.
 - 페이지별 전환·롤백은 프래그먼트/컴포넌트 교체 한 줄로 가능.
 
-### 2.4 Thymeleaf v03 스킨 — WIP 보류 (Planet645)
+### 2.4 Thymeleaf v03 스킨 — 페이지 옵트인 구조로 확정 (Planet645)
 
-- `planet645-skin.css`·레이아웃 4종 수정·`fonts/`·`planet645-ui-kit/` static은 **미커밋 WIP**로 보류 (검수 범위가 `/dashboard`뿐이라 SSR 전 페이지에 영향 주는 스킨은 제외).
-- ⚠️ 스킨 WIP의 `.lotto-number` color-mix 워시 오버라이드는 "기존 로또볼 유지" 정책과 충돌 — 스킨 커밋 전 결정 필요.
+- 전역 스킨이 "한 페이지씩 검수 → 통과분만 병합" 컨셉과 충돌(검수 단위 ≠ 병합 단위) → **옵트인 구조로 리팩터링 후 커밋**.
+- 레이아웃 4종의 전역 `<link>` 제거 — 스킨은 검수 통과한 페이지 `<head>`에 **링크 1줄**로만 적용(롤백 = 1줄 제거). Gaegu 폰트는 스킨 CSS가 `@import`.
+- `.lotto-number` color-mix 워시 오버라이드 **삭제** — "기존 로또볼 유지" 정책 확정. 워시 톤은 추후 새 변형 클래스(`.lotto-number--wash`)로.
+- 병합 판단 기준 4가지(변경 반경·검수=병합 단위·롤백 비용·가산적 변경)와 페이지별 체크리스트를 `artifact/design/ui/v03-skin-rollout.md`로 문서화.
+- 커밋 직후 기준 스킨 적용 페이지 0개 — 기존 SSR 렌더링 영향 없음.
 
 ### 2.5 누적 상태
 
@@ -93,7 +96,7 @@ _(해당 없음)_
 
 #### Planet645
 
-- [ ] Thymeleaf v03 스킨 WIP 처리 결정 — `.lotto-number` 워시 오버라이드의 "기존 로또볼 유지" 충돌 포함 (§2.4)
+- [ ] 다음 SSR 페이지 검수 → 스킨 옵트인 1줄 적용 (가이드: `artifact/design/ui/v03-skin-rollout.md`)
 - [ ] `RecommendSelectPage` Spring 라우트 전환 여부 검토 (현재 dormant)
 
 #### 개발 운영
@@ -108,6 +111,7 @@ _(해당 없음)_
 | 보드 상태 확인 | §2.1 |
 | 대시보드 v03 임베드 반영 | §2.2 |
 | 로또볼 UI 복수 운용 정책 | §2.3 |
+| v03 스킨 옵트인 구조 확정·롤아웃 가이드 | §2.4 |
 
 ---
 
