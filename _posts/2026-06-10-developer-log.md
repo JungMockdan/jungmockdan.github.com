@@ -6,7 +6,7 @@ tags: [task-board, ui-kit, design-v03, lotto-ball, 개발일지]
 toc: true
 toc_sticky: true
 date: 2026-06-10 09:42:00 +0900
-last_modified_at: 2026-06-10 16:46:00 +0900
+last_modified_at: 2026-06-10 17:12:00 +0900
 ---
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
@@ -82,6 +82,14 @@ last_modified_at: 2026-06-10 16:46:00 +0900
 | 원인 | `/dashboard`는 `MainController`가 `forward:/planet645-react/index.html`로 React 임베드 서빙 중 (UI-REACT-PROMOTE-01 이후). SSR 대시보드 템플릿은 현재 미라우팅 |
 | 해결 | 반영 경로를 `npm run build:spring` 임베드 재발행으로 수정. `ballKit` 프래그먼트는 추가하지 않음 — Thymeleaf 이식(`CHARACTER-THYMELEAF-01`) 단계에서 필요 시 도입            |
 
+### 3.2 `/recommend/select` React 전환 보류 (Planet645)
+
+| 구분 | 내용 |
+|------|------|
+| 문제 | React `RecommendSelectPage` 시각 검수 통과 → 라우트 전환 요청. 그러나 페이지가 어떤 POST도 하지 않음 — 푸터에 "추천 실행(크레딧 차감, `POST /recommend/execute`)·문구 시드는 Lab 미연결" 명시, 실행 버튼은 결과 화면으로 이동만 |
+| 원인 | `POST /recommend/execute`는 세션 `SESSION_RECOMMEND_INPUT`(`POST /select/input`이 저장) 의존. 지금 `GET /recommend/select`를 forward로 바꾸면 입력 저장·실행 경로가 끊겨 **추천·크레딧 차감 기능 회귀** + 푸터의 "본 앱 추천 받기" 링크 자기참조 루프 |
+| 해결(결정) | 전환 **보류**, SSR 위저드 유지. 실행 연결 작업을 보드 `UI-REACT-SELECT-WIRING-01`(292)로 등록 — evaluate 페이지의 기존 패턴(CSRF 메타 API + SSR 엔드포인트 form POST) 재사용 계획 포함. 병합 기준 "기능 동작" 항목(§2.4 가이드) 적용 사례 |
+
 ---
 
 ## 4. 배운 점
@@ -97,7 +105,7 @@ _(해당 없음)_
 #### Planet645
 
 - [ ] 다음 SSR 페이지 검수 → 스킨 옵트인 1줄 적용 (가이드: `artifact/design/ui/v03-skin-rollout.md`)
-- [ ] `RecommendSelectPage` Spring 라우트 전환 여부 검토 (현재 dormant)
+- [ ] `UI-REACT-SELECT-WIRING-01`(292) — select 실행 연결 후 React 라우트 전환 (§3.2)
 
 #### 개발 운영
 
